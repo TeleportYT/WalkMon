@@ -1,5 +1,8 @@
 package com.vik.test;
 
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,12 +15,14 @@ public class Level {
     private int Size;
     private int maxLength;
     private int maxTunnels;
-    private int startX,startY;
+    private World world;
+    public int startX,startY;
 
-    public Level(int Size, int maxLength, int maxTunnels){
+    public Level(int Size, int maxLength, int maxTunnels,World world){
         this.Size = Size;
         this.maxLength = maxLength;
         this.maxTunnels = maxTunnels;
+        this.world = world;
         mapArr = new int[this.Size][this.Size];
         this.wallsList = new ArrayList<>();
         int currentRow = (int)Math.floor(Math.random()*this.Size);
@@ -60,10 +65,44 @@ public class Level {
         for(int i = 0; i<this.Size;i++){
             for(int j = 0; j<this.Size;j++){
                 if(mapArr[i][j] == 0){
-                    wallsList.add(new Wall(i,j));
+                    wallsList.add(new Wall(i,j,this.world));
                 }
             }
         }
+    }
+
+    public int getCollision(int x, int y){
+        if(x<0 || y<0){
+            return 0;
+        }
+        if(x>=this.Size || y>=this.Size){
+            return 0;
+        }
+        return mapArr[x][y];
+    }
+
+
+
+    public boolean lineOfSightCheap(Vector3 pos1, Vector3 pos2){
+
+        Vector3 tmp = new Vector3();
+        tmp.set(pos1);
+
+        Vector3 dir = new Vector3();
+        dir.set(tmp).sub(pos2);
+        dir.y = 0;
+        dir.nor();
+
+        while(tmp.dst2(pos2) > (0.25f) * (0.25f)){
+            tmp.mulAdd(dir, -0.25f);
+
+            if(getCollision((int)tmp.x, (int)tmp.z)!=1)
+                return false;
+
+        }
+
+
+        return true;
     }
 
     public List<Wall> getWalls(){

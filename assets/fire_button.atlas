@@ -1,0 +1,34 @@
+
+fire_button.png
+size: 2048, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+119-1190059_button-icon-purple-purple-bullet-icon
+  rotate: false
+  xy: 1, 961
+  size: 820, 860
+  orig: 820, 860
+  offset: 0, 0
+  index: -1
+232px-UV_Light_Icon.svg
+  rotate: false
+  xy: 1, 1
+  size: 232, 232
+  orig: 232, 232
+  offset: 0, 0
+  index: -1
+Purple_Light_Icon.svg
+  rotate: false
+  xy: 823, 1357
+  size: 464, 464
+  orig: 464, 464
+  offset: 0, 0
+  index: -1
+imgbin-color-business-violet-purple-business-ai85eUAtaAFmCYQaWPcYbb25j
+  rotate: false
+  xy: 1, 235
+  size: 728, 724
+  orig: 728, 724
+  offset: 0, 0
+  index: -1

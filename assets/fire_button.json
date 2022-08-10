@@ -1,0 +1,8 @@
+{
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: {
+		up: Purple_Light_Icon.svg
+		down: 232px-UV_Light_Icon.svg
+	}
+}
+}
