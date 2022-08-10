@@ -176,7 +176,7 @@ public class PlayerController
         inst.remove(this.player);
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
         Gdx.app.debug("Player Dead","You are dead");
-        cam.
+        //cam.
     }
 
     public ModelInstance getPlayer(){

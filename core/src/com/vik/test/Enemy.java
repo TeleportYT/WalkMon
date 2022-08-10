@@ -32,7 +32,7 @@ public class Enemy {
     public Vector3 EnemyMove;
     private List<ModelInstance> objects;
     private List<Enemy> enemys;
-
+    private float shootTimer = 0;
 
     public Enemy(List<ModelInstance> instances, Level lvl, float x, float z,List<Enemy> enemys){
         position = new Vector3(x+0.5f,0.5f,z+0.5f);
@@ -55,6 +55,8 @@ public class Enemy {
 
     public void Update(PlayerController player){
 
+        float dt = Gdx.graphics.getDeltaTime();
+
         Vector3 position1 = new Vector3(), position2 = player.cam.position, direction = new Vector3();
 
         modelInstance.transform.getTranslation(position1);
@@ -71,7 +73,14 @@ public class Enemy {
 
         modelInstance.transform.set(position1, quaternion);
 
-        ifSeePlayer(direction,player);
+        if(shootTimer <= 0){
+            ifSeePlayer(direction,player);
+            shootTimer = 5;
+        }
+        else{
+            shootTimer-= dt;
+        }
+
 
     }
 
