@@ -1,7 +1,6 @@
 package com.vik.test;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -12,9 +11,6 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
 import java.util.List;
 
@@ -87,18 +83,14 @@ public class Enemy {
     public Boolean ifSeePlayer(Vector3 direction,PlayerController pl){
         Vector3 tmp = new Vector3();
         tmp.set(position).mulAdd(direction, -2f);
-        Vector3 pos = new Vector3();
         if(pl.position.dst2(position) < (16) * (16) && lvl.lineOfSightCheap(position, pl.position)){
-            Gdx.app.setLogLevel(Application.LOG_DEBUG);
-            Gdx.app.debug("Enemy","i see you");
-            ShootPlayer(pl);
+            ShootPlayer(pl,direction);
         }
         return true;
     }
 
-    public void ShootPlayer(PlayerController pl){
-        pl.Damage(10);
-
+    public void ShootPlayer(PlayerController pl,Vector3 direction){
+          MyClass.fbManager.AddFireBall(new FireBall(10,2,position,direction,lvl));
     }
 
 

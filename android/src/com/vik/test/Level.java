@@ -1,13 +1,9 @@
 package com.vik.test;
 
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import jdk.internal.org.jline.utils.Log;
 
 public class Level {
     private int[][] mapArr;

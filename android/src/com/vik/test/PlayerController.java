@@ -1,8 +1,9 @@
 package com.vik.test;
+import android.content.Context;
+import android.content.Intent;
+
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -10,18 +11,14 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
 import java.util.List;
 
-import jdk.nashorn.internal.runtime.Debug;
 
 public class PlayerController
 {
@@ -31,10 +28,10 @@ public class PlayerController
     private static final int PLAYER = 1;
     public Vector3 playerMove;
     private btDynamicsWorld dynamicsWorld;
-    public float hp;
+    public static float hp;
     private Level lvl;
 
-    Vector3 position;
+    public static Vector3 position;
 
     float moveSpeed = 2f;
 
@@ -45,11 +42,12 @@ public class PlayerController
     private List<Enemy> enemys;
     private List<ModelInstance> inst;
     private boolean attack=false;
-
+    private Context ct;
 
     private float speed = 5f;
 
-    public PlayerController(List<ModelInstance> instances,PerspectiveCamera cam,btDynamicsWorld dynamicWorld,Level lvl, GameUI ui,List<Enemy> enemys) {
+    public PlayerController(List<ModelInstance> instances, PerspectiveCamera cam, btDynamicsWorld dynamicWorld, Level lvl, GameUI ui, List<Enemy> enemys, Context ct) {
+        this.ct = ct;
         hp = 100f;
         this.cam = cam;
         this.dynamicsWorld = dynamicWorld;
@@ -91,6 +89,10 @@ public class PlayerController
         }
         if(!this.knob.shotBt.isPressed()){
             attack = false;
+        }
+
+        if(hp<100){
+            hp+=1*Gdx.graphics.getDeltaTime();
         }
 
 
@@ -148,25 +150,20 @@ public class PlayerController
 
     public void Fire(List<Enemy> enemys){
         Vector3 tmp = new Vector3();
-        tmp.set(position).mulAdd(cam.direction, 2f);
-        ModelInstance ins = new ModelInstance(new ModelBuilder()
-                .createCapsule(0.25f, .5f, 10, new Material(ColorAttribute.createAmbient(Color.YELLOW)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
-        );
-        ins.transform.translate(tmp);
-        inst.add(ins);
-        for (Enemy enemy:enemys) {
-            if(enemy.position.dst2(tmp)<=(2*2) && knob.shotBt.isPressed()){
-                enemy.GetDamage(10f);
-                Gdx.app.setLogLevel(Application.LOG_DEBUG);
-                Gdx.app.debug("shoot","hitted");
-            }
-        }
+        tmp.set(-cam.direction.x, -cam.direction.y, -cam.direction.z);
+        MyClass.blManager.AddBullet(new Bullet(10,10f,position,tmp,lvl));
 
     }
 
 
     public void Damage(float damage){
-        this.hp -= damage;
+
+        if(this.hp>0){
+            this.hp -= damage;
+        }
+        Intent intent=new Intent("Player Damaged");
+        intent.putExtra("Player Health", this.hp);
+        this.ct.sendBroadcast(intent);
         if(this.hp<=0){
           Die();
         }

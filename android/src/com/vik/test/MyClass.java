@@ -1,59 +1,41 @@
 package com.vik.test;
 
-import com.badlogic.gdx.Application;
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
-import com.badlogic.gdx.physics.bullet.collision.Collision;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
-import com.badlogic.gdx.physics.bullet.collision.btConeShape;
-import com.badlogic.gdx.physics.bullet.collision.btCylinderShape;
-import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.physics.bullet.Bullet;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.dynamics.btConstraintSolver;
-import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.ArrayMap;
 
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
-import jdk.internal.org.jline.utils.Log;
+
 
 public class MyClass extends ApplicationAdapter {
+	public static Context context;
 	SpriteBatch batch;
 	private PerspectiveCamera cam;
 	public Level mapLevel;
@@ -61,21 +43,36 @@ public class MyClass extends ApplicationAdapter {
 	public ModelBuilder modelBuilder;
     private  FirstPersonCameraController camController;
 	ArrayMap<String, GameObject.Constructor> constructors;
-    private PlayerController pc;
-    private List<ModelInstance> instances;
+    public static PlayerController pc;
+    private BroadcastReceiver bd;
+    public static List<ModelInstance> instances;
 
     private World world;
 	GameUI ui;
 	private Stage st;
-    private List<Enemy> enemys;
+    public static List<Enemy> enemys;
+    public static FireballManager fbManager;
+    public static BulletManager blManager;
+
+
+    public MyClass(Context ct){
+    	context = ct;
+	}
 
 	@Override
 	public void create () {
 
-modelBuilder = new ModelBuilder();
+
+		IntentFilter intentFilter = new IntentFilter("Player Damaged");
+		intentFilter.addAction("Player Dead");
+		intentFilter.addAction("Pause Game");
+		intentFilter.addAction("Player Healed");
+        context.registerReceiver(receiver,intentFilter);
+
+
+        modelBuilder = new ModelBuilder();
 		// load world
 		world = new World();
-
 		// setup camera
 		cam = new PerspectiveCamera(65, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.position.set(0, 10, 0);
@@ -125,14 +122,15 @@ modelBuilder = new ModelBuilder();
 
 		loadPlayer();
 
-
+		fbManager = new FireballManager();
+        blManager = new BulletManager();
 
 	}
 
 	private void loadPlayer() {
 
 		// setup player/camera movement
-		pc = new PlayerController(instances,cam,world.getDynamicsWorld(),mapLevel,ui,enemys);
+		pc = new PlayerController(instances,cam,world.getDynamicsWorld(),mapLevel,ui,enemys,context);
 	}
 
 	@Override
@@ -148,7 +146,9 @@ modelBuilder = new ModelBuilder();
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		cam.update();
-
+        ui.Update();
+        fbManager.Update();
+        blManager.Update();
 		for (Enemy enemy : enemys) {
 			enemy.Update(pc);
 		}
@@ -173,5 +173,25 @@ modelBuilder = new ModelBuilder();
 		world.Dispose();
 		batch.dispose();
 	}
+
+
+	//region Broadcast Receiver
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().equals("Player Damaged")){
+				Toast.makeText(context,"Player Damaged",Toast.LENGTH_SHORT).show();
+			}
+			else if(intent.getAction().equals("Player Dead")){
+				Toast.makeText(context,"Player Died",Toast.LENGTH_SHORT);
+			}
+			else if(intent.getAction().equals("Pause Game")){
+			}
+			else if(intent.getAction().equals("Player Healed")){
+
+			}
+		}
+	};
+	//endregion
 
 }
