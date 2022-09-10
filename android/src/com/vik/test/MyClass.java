@@ -1,33 +1,25 @@
 package com.vik.test;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
-import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ArrayMap;
+import com.vik.test.Enemys.Bob;
+import com.vik.test.Enemys.Duplicator;
+import com.vik.test.Enemys.EnemyManager;
+import com.vik.test.Enemys.Warrior;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,23 +28,19 @@ import java.util.List;
 
 public class MyClass extends ApplicationAdapter {
 	public static Context context;
-	SpriteBatch batch;
 	private PerspectiveCamera cam;
-	public Level mapLevel;
+	public static Level mapLevel;
 	public ModelBatch modelBatch;
 	public ModelBuilder modelBuilder;
-    private  FirstPersonCameraController camController;
-	ArrayMap<String, GameObject.Constructor> constructors;
+    private FirstPersonCameraController camController;
     public static PlayerController pc;
-    private BroadcastReceiver bd;
     public static List<ModelInstance> instances;
+    public static EnemyManager enemies;
 
     private World world;
-	GameUI ui;
+	public static GameUI GameUI;
 	private Stage st;
-    public static List<Enemy> enemys;
-    public static FireballManager fbManager;
-    public static BulletManager blManager;
+
 
 
     public MyClass(Context ct){
@@ -81,7 +69,6 @@ public class MyClass extends ApplicationAdapter {
 		cam.update();
 		// setup controller for camera
 		camController = new FirstPersonCameraController(cam);
-		batch = new SpriteBatch();
 		instances = new ArrayList<>();
 		modelBatch = new ModelBatch();
 		mapLevel = new Level(20,8,50,world);
@@ -91,67 +78,46 @@ public class MyClass extends ApplicationAdapter {
 			instances.add(walls.get(i).getMi());
 		}
 
-		ModelBuilder modelBuilder = new ModelBuilder();
-		modelBuilder.begin();
-		Material material = new Material(ColorAttribute.createDiffuse(Color.GRAY));
-		MeshPartBuilder builder = modelBuilder.part("testplane", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, material);
-		builder.rect(0, 0, 1000f,
-				1000f, 0, 1000f,
-				1000f, 0, 0,
-				0, 0, 0,
-				0, 2, 0);
-		builder.setVertexTransform(new Matrix4().rotate(new Vector3(1,0,1),90));
-		Model model = modelBuilder.end();
-		ModelInstance modelInstance = new ModelInstance(model);
-        instances.add(modelInstance);
-
-
-
 		cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-		ui = new GameUI();
-		st = ui.GetStage();
-		InputMultiplexer multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(st);
-		multiplexer.addProcessor(camController);
+		GameUI = new GameUI();
+		enemies = new EnemyManager();
 
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(com.vik.test.GameUI.st);
+		multiplexer.addProcessor(camController);
         Gdx.input.setInputProcessor(multiplexer);
 
-        enemys = new ArrayList<Enemy>();
-        new Enemy(instances,mapLevel, mapLevel.startX, mapLevel.startY,enemys);
-
-
 		loadPlayer();
-
-		fbManager = new FireballManager();
-        blManager = new BulletManager();
 
 	}
 
 	private void loadPlayer() {
-
-		// setup player/camera movement
-		pc = new PlayerController(instances,cam,world.getDynamicsWorld(),mapLevel,ui,enemys,context);
+		// setup player
+		pc = new PlayerController(cam);
+		//enemies.AddEnemy(new Bob(mapLevel.startX, mapLevel.startY));
+		//enemies.AddEnemy(new Warrior(mapLevel.startX, mapLevel.startY));
+		//enemies.AddEnemy(new Duplicator(mapLevel.startX, mapLevel.startY));
 	}
 
 	@Override
 	public void render () {
+
 		camController.update();
-		pc.update();
-
-
 		cam.position.y = 0.5f;
 		world.Update(Gdx.graphics.getDeltaTime());
+		pc.update();
+
 
 		Gdx.gl20.glClearColor(0, 0f, 0, 0);
 		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
 		cam.update();
-        ui.Update();
-        fbManager.Update();
-        blManager.Update();
-		for (Enemy enemy : enemys) {
-			enemy.Update(pc);
-		}
+		enemies.Update();
+		GameUI.Update();
+
+
+
 
 		modelBatch.begin(cam);
 		modelBatch.render(instances, world.getEnvironment());
@@ -161,8 +127,8 @@ public class MyClass extends ApplicationAdapter {
 
 
 
-		st.act(Gdx.graphics.getDeltaTime());
-		st.draw();
+		com.vik.test.GameUI.st.act(Gdx.graphics.getDeltaTime());
+		com.vik.test.GameUI.st.draw();
 
 	}
 
@@ -171,7 +137,6 @@ public class MyClass extends ApplicationAdapter {
 		st.dispose();
 		modelBatch.dispose();
 		world.Dispose();
-		batch.dispose();
 	}
 
 

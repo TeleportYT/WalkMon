@@ -1,18 +1,13 @@
 package com.vik.test;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-
-import java.lang.annotation.Inherited;
+import com.vik.test.Enemys.Duplicator;
+import com.vik.test.Enemys.Enemy;
+import com.vik.test.Enemys.EnemyManager;
 
 public class Projectiles {
 
@@ -53,9 +48,19 @@ public class Projectiles {
             Collision("Player",null);
         }
 
-        for (Enemy enemy:MyClass.enemys) {
-            if(enemy.position.dst2(position)<=(0.5*0.5)){
-                Collision("Enemy",enemy);
+            for (Enemy enemy: MyClass.enemies.enemyies) {
+                if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+                    Collision("Enemy",enemy);
+                    break;
+                }
+            }
+
+        for (Duplicator duplicator : EnemyManager.Duplicators){
+            for (Enemy enemy: duplicator.minions){
+                if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+                    Collision("Enemy",enemy);
+                    break;
+                }
             }
         }
 

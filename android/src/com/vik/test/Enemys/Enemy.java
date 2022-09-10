@@ -1,4 +1,4 @@
-package com.vik.test;
+package com.vik.test.Enemys;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -11,56 +11,58 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
+import com.vik.test.MyClass;
+import com.vik.test.PlayerController;
 
-import java.util.List;
+public abstract class Enemy {
 
-public class Enemy {
+    protected float HP=100f;
+    protected float Damage = 10f;
 
-    private float HP=100f;
-    private float Damage=10f;
-    private ModelInstance modelInstance;
-    private float speed=10f;
-    private Level lvl;
-    Vector3 position;
-    float moveSpeed = 2f;
-    private Vector3 moveVector;
-    private Vector3 tmpVector;
-    public Vector3 EnemyMove;
-    private List<ModelInstance> objects;
-    private List<Enemy> enemys;
-    private float shootTimer = 0;
+    protected ModelInstance getModelInstance() {
+        return modelInstance;
+    }
 
-    public Enemy(List<ModelInstance> instances, Level lvl, float x, float z,List<Enemy> enemys){
+    protected ModelInstance modelInstance;
+
+    public Vector3 getPosition() {
+        return position;
+    }
+
+    public void setPosition(Vector3 position) {
+        this.position = position;
+    }
+
+    protected Vector3 position;
+    protected Vector3 direction;
+    protected Quaternion quaternion;
+    protected float moveSpeed = 2f;
+    protected Vector3 moveVector;
+    protected Vector3 tmpVector;
+
+    public Enemy(float x, float z){
         position = new Vector3(x+0.5f,0.5f,z+0.5f);
         moveVector = new Vector3();
         tmpVector = new Vector3();
-
-        EnemyMove = new Vector3();
         modelInstance = new ModelInstance(new ModelBuilder()
                 .createBox(0.25f, 0.25f, 0.25f, new Material(ColorAttribute.createAmbient(Color.BLACK)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
         );
         modelInstance.transform.translate(x+0.5f,0.5f,z+0.5f);
-        instances.add(modelInstance);
-        this.objects = instances;
-        this.enemys = enemys;
-        this.lvl = lvl;
-        enemys.add(this);
 
+        MyClass.instances.add(modelInstance);
 
     }
 
-    public void Update(PlayerController player){
-
-        float dt = Gdx.graphics.getDeltaTime();
-
-        Vector3 position1 = new Vector3(), position2 = player.cam.position, direction = new Vector3();
-
+    public void Update(){
+        Vector3 position1 = new Vector3(), position2 = new Vector3();
+        direction = new Vector3();
+        position2.set(MyClass.pc.cam.position.x,MyClass.pc.cam.position.y,MyClass.pc.cam.position.z);
         modelInstance.transform.getTranslation(position1);
         direction = (position2).sub(position1).nor();
 
         direction.set(-direction.x, -direction.y, -direction.z);
 
-        Quaternion quaternion = new Quaternion();
+        quaternion = new Quaternion();
         Matrix4 instanceRotation = modelInstance.transform.cpy().mul(modelInstance.transform);
 
         instanceRotation.setToLookAt(direction, new Vector3(0,-1,0));
@@ -69,28 +71,25 @@ public class Enemy {
 
         modelInstance.transform.set(position1, quaternion);
 
-        if(shootTimer <= 0){
-            ifSeePlayer(direction,player);
-            shootTimer = 5;
-        }
-        else{
-            shootTimer-= dt;
-        }
-
-
+        ChangeUpdate(direction,quaternion);
     }
 
-    public Boolean ifSeePlayer(Vector3 direction,PlayerController pl){
+    public Boolean ifSeePlayer(Vector3 direction){
         Vector3 tmp = new Vector3();
         tmp.set(position).mulAdd(direction, -2f);
-        if(pl.position.dst2(position) < (16) * (16) && lvl.lineOfSightCheap(position, pl.position)){
-            ShootPlayer(pl,direction);
+        if(PlayerController.position.dst2(position) < (16) * (16) && MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
+           return true;
         }
-        return true;
+        return false;
     }
 
-    public void ShootPlayer(PlayerController pl,Vector3 direction){
-          MyClass.fbManager.AddFireBall(new FireBall(10,2,position,direction,lvl));
+
+    public void ChangeUpdate(Vector3 direction,Quaternion quaternion){
+
+    }
+
+    public void Attack(Vector3 direction){
+
     }
 
 
@@ -106,12 +105,7 @@ public class Enemy {
     }
 
     public void Die(){
-        enemys.remove(this);
-        objects.remove(modelInstance);
-    }
-
-    public Vector3 GetPostion(){
-          return position;
+        EnemyManager.RemoveEnemy(this);
     }
 
 

@@ -22,79 +22,50 @@ import java.util.List;
 
 public class PlayerController
 {
-    private btRigidBody playerBody;
-    private ModelInstance player;
     public PerspectiveCamera cam;
-    private static final int PLAYER = 1;
     public Vector3 playerMove;
-    private btDynamicsWorld dynamicsWorld;
-    public static float hp;
-    private Level lvl;
+    public float hp;
+
 
     public static Vector3 position;
-
     float moveSpeed = 2f;
-
     private Vector3 moveVector;
     private Vector3 tmpVector;
 
+
+
     private GameUI knob;
-    private List<Enemy> enemys;
-    private List<ModelInstance> inst;
     private boolean attack=false;
-    private Context ct;
+    public static BulletManager blManager;
 
-    private float speed = 5f;
-
-    public PlayerController(List<ModelInstance> instances, PerspectiveCamera cam, btDynamicsWorld dynamicWorld, Level lvl, GameUI ui, List<Enemy> enemys, Context ct) {
-        this.ct = ct;
+    public PlayerController(PerspectiveCamera cam) {
         hp = 100f;
         this.cam = cam;
-        this.dynamicsWorld = dynamicWorld;
-        this.inst = instances;
-        position = new Vector3(lvl.startX+0.5f,0.5f,lvl.startY+0.5f);
+        position = new Vector3(MyClass.mapLevel.startX+0.5f,0.5f,MyClass.mapLevel.startY+0.5f);
         moveVector = new Vector3();
         tmpVector = new Vector3();
 
         playerMove = new Vector3();
-        player = new ModelInstance(new ModelBuilder()
-                .createCapsule(0.2f, 3, 10, new Material(ColorAttribute.createAmbient(Color.BLACK)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
-        );
-        instances.add(player);
         // load player rigid body
-        btCapsuleShape playerShape = new btCapsuleShape(1f, 3f);
-        float mass = 10;
-        Vector3 localInertia = new Vector3();
-        playerShape.calculateLocalInertia(mass, localInertia);
-        playerBody = new btRigidBody(mass, null, playerShape, localInertia);
-        playerBody.proceedToTransform(player.transform);
-        playerBody.setCollisionFlags(playerBody.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-        // set id to find with collision detection
-        playerBody.setUserValue(PLAYER);
-        dynamicsWorld.addRigidBody(playerBody);
-        this.knob = ui;
-
-        this.lvl = lvl;
-
-        this.enemys = enemys;
+        this.knob = MyClass.GameUI;
+        blManager = new BulletManager();
     }
 
     public void update() {
         // make sure to activate the player body so bullet doesnt put it to sleep
-        playerBody.activate();
+        blManager.Update();
         MovePlayer(this.knob.th.getKnobPercentX(),this.knob.th.getKnobPercentY());
         if(this.knob.shotBt.isPressed() && !attack){
             attack = true;
-            Fire(enemys);
+            Fire();
         }
         if(!this.knob.shotBt.isPressed()){
             attack = false;
         }
 
         if(hp<100){
-            hp+=1*Gdx.graphics.getDeltaTime();
+            hp+= 1*Gdx.graphics.getDeltaTime();
         }
-
 
     }
 
@@ -129,9 +100,9 @@ public class PlayerController
         float colX = moveVector.x==0 ? 0 : (moveVector.x>0 ? .25f : -0.25f);
         float colZ = moveVector.z==0 ? 0 : (moveVector.z>0 ? .25f : -.25f);
 
-        if (lvl.getCollision((int)(position.x + moveVector.x + colX), (int)position.z) != 0)
+        if (MyClass.mapLevel.getCollision((int)(position.x + moveVector.x + colX), (int)position.z) != 0)
             position.add(moveVector.x, 0, 0);
-        if (lvl.getCollision((int)position.x, (int)(position.z + moveVector.z + colZ)) != 0)
+        if (MyClass.mapLevel.getCollision((int)position.x, (int)(position.z + moveVector.z + colZ)) != 0)
             position.add(0, 0, moveVector.z);
 
         if(position.x < 0){
@@ -148,11 +119,10 @@ public class PlayerController
         Gdx.app.debug("Player Position",""+position.x+","+position.y+","+position.z);
     }
 
-    public void Fire(List<Enemy> enemys){
+    public void Fire(){
         Vector3 tmp = new Vector3();
         tmp.set(-cam.direction.x, -cam.direction.y, -cam.direction.z);
-        MyClass.blManager.AddBullet(new Bullet(10,10f,position,tmp,lvl));
-
+        blManager.AddBullet(new Bullet(10,10f,position,tmp));
     }
 
 
@@ -163,21 +133,16 @@ public class PlayerController
         }
         Intent intent=new Intent("Player Damaged");
         intent.putExtra("Player Health", this.hp);
-        this.ct.sendBroadcast(intent);
+        MyClass.context.sendBroadcast(intent);
         if(this.hp<=0){
           Die();
         }
     }
 
     public void Die(){
-        inst.remove(this.player);
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
         Gdx.app.debug("Player Dead","You are dead");
         //cam.
-    }
-
-    public ModelInstance getPlayer(){
-        return player;
     }
 
 }

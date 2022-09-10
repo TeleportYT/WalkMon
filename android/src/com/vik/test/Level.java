@@ -1,5 +1,15 @@
 package com.vik.test;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
@@ -8,6 +18,11 @@ import java.util.List;
 public class Level {
     private int[][] mapArr;
     private List<Wall> wallsList;
+
+    public int getSize() {
+        return Size;
+    }
+
     private int Size;
     private int maxLength;
     private int maxTunnels;
@@ -28,6 +43,20 @@ public class Level {
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         int[] nextDirection = new int[2];
         int[] lastDirection = new int[2];
+
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.begin();
+        Material material = new Material(ColorAttribute.createDiffuse(Color.GRAY));
+        MeshPartBuilder builder = modelBuilder.part("testplane", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, material);
+        builder.rect(0, 0, Size,
+                Size, 0, Size,
+                Size, 0, 0,
+                0, 0, 0,
+                0, 2, 0);
+        builder.setVertexTransform(new Matrix4().rotate(new Vector3(1,0,1),90));
+        Model model = modelBuilder.end();
+        ModelInstance modelInstance = new ModelInstance(model);
+        MyClass.instances.add(modelInstance);
 
         while (this.maxTunnels>0 && this.Size>0 && this.maxLength>0) {
             do {

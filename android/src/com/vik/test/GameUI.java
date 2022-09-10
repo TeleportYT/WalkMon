@@ -29,7 +29,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameUI {
 
-    private Stage st;
+    public static Stage st;
     private Skin skin;
     public Touchpad th;
     public Button shotBt;
@@ -73,7 +73,10 @@ public class GameUI {
     }
 
     public void Update(){
-        BloodEffect.setColor(255,255,255,1-(PlayerController.hp/100));
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Gdx.app.debug("Game UI","Player hp is: "+MyClass.pc.hp);
+
+        BloodEffect.setColor(255,255,255,1-(MyClass.pc.hp/100));
     }
 
 

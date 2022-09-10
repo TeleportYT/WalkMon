@@ -15,7 +15,6 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 
 public class Wall {
     private Model md;
-    private GameObject obj;
     private ModelInstance mi;
     private float x,z;
 
@@ -29,16 +28,7 @@ public class Wall {
         this.x = x;
         this.z = z;
         this.mi.transform.setToTranslation(x+0.5f,0.5f,z+0.5f);
-        BoundingBox bx = new BoundingBox();
-        Vector3 localInertia = new Vector3();
-        mi.calculateBoundingBox(bx);
-        btCollisionShape shape = new btBoxShape(bx.getDimensions(localInertia));
-        obj = new GameObject.Constructor(md,"Wall",shape,world,0f).construct();
-        obj.getRigidBody().proceedToTransform(mi.transform);
-        obj.getRigidBody().setCollisionFlags(obj.getRigidBody().getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
-        // set id to find with collision detection
-        obj.getRigidBody().setUserValue(2);
-        obj.getRigidBody().setWorldTransform(mi.transform);
+        MyClass.instances.add(mi);
     }
 
     public ModelInstance getMi(){
