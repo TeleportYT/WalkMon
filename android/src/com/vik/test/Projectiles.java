@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.vik.test.Enemys.Duplicator;
 import com.vik.test.Enemys.Enemy;
 import com.vik.test.Enemys.EnemyManager;
+import com.vik.test.Enemys.Warrior;
 
 public class Projectiles {
 
@@ -48,7 +49,7 @@ public class Projectiles {
             Collision("Player",null);
         }
 
-            for (Enemy enemy: MyClass.enemies.enemyies) {
+            for (Enemy enemy: EnemyManager.enemyies) {
                 if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
                     Collision("Enemy",enemy);
                     break;
@@ -56,10 +57,12 @@ public class Projectiles {
             }
 
         for (Duplicator duplicator : EnemyManager.Duplicators){
-            for (Enemy enemy: duplicator.minions){
-                if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
-                    Collision("Enemy",enemy);
-                    break;
+            if(!duplicator.getMinions().isEmpty()){
+                for (Warrior enemy: duplicator.getMinions()){
+                    if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+                        Collision("Enemy",enemy);
+                        break;
+                    }
                 }
             }
         }

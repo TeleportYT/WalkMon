@@ -89,4 +89,8 @@ task run(type: Exec) {
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.vik.test/com.vik.test.AndroidLauncher'
 }
 
+dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+}
+
 eclipse.project.name = appName + "-android"

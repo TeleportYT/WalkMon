@@ -60,7 +60,9 @@ public class EnemyManager {
                     x = (rand.nextInt(mapLevel.getSize()));
                     z = (rand.nextInt(mapLevel.getSize()));
                 }
-                Duplicators.add(new Duplicator(x,z));
+                Duplicator dp = new Duplicator(x,z);
+                AddEnemy(dp);
+                Duplicators.add(dp);
                 duplicators--;
                 maxEnemies--;
             }

@@ -11,7 +11,15 @@ import java.util.ArrayList;
 public class Duplicator extends Enemy{
     public float spawnTimer = 10f;
 
-    public ArrayList<Warrior> minions;
+    public ArrayList<Warrior> getMinions() {
+        return minions;
+    }
+
+    public void setMinions(ArrayList<Warrior> minions) {
+        this.minions = minions;
+    }
+
+    private ArrayList<Warrior> minions;
 
 
     public Duplicator(float x, float z) {
