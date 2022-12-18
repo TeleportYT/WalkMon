@@ -1,7 +1,8 @@
-package com.vik.test.Enemys;
+package Enemys;
+
+import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.vik.test.FireBall;
 import com.vik.test.MyClass;
@@ -36,8 +37,12 @@ public class Bob extends Enemy{
 
 
     public void Attack(Vector3 direction){
-        MyClass.enemies.fbManager.AddFireBall(new FireBall(10,2,position,direction,MyClass.mapLevel));
+        EnemyManager.fbManager.AddFireBall(new FireBall(10,2,position,direction,MyClass.mapLevel));
     }
 
-
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

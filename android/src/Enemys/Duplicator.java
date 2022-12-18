@@ -1,30 +1,28 @@
-package com.vik.test.Enemys;
+package Enemys;
 
-import static com.vik.test.MyClass.mapLevel;
+import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector3;
-import com.vik.test.MyClass;
 
 import java.util.ArrayList;
 
 public class Duplicator extends Enemy{
-    public float spawnTimer = 10f;
 
-    public ArrayList<Warrior> getMinions() {
+    public ArrayList<Minion> getMinions() {
         return minions;
     }
 
-    public void setMinions(ArrayList<Warrior> minions) {
+    public void setMinions(ArrayList<Minion> minions) {
         this.minions = minions;
     }
 
-    private ArrayList<Warrior> minions;
+    private ArrayList<Minion> minions;
+    public float spawnTimer = 10f;
 
 
     public Duplicator(float x, float z) {
         super(x, z);
-        minions = new ArrayList<Warrior>();
+        minions = new ArrayList<Minion>();
     }
 
     public void Update(){
@@ -47,16 +45,22 @@ public class Duplicator extends Enemy{
     }
 
     public void Duplicate(){
-        Warrior minion = new Warrior(position.x,position.z);
+        Minion minion = new Minion(position.x,position.z,this);
         minions.add(minion);
     }
 
+    @Override
     public void Die(){
-        for (Enemy minion : minions) {
-            MyClass.instances.remove(minion.getModelInstance());
+        for (Minion minion : minions) {
+            minion.Die();
         }
-        minions = null;
+        EnemyManager.Duplicators.remove(this);
         super.Die();
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

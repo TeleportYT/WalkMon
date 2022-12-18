@@ -1,4 +1,4 @@
-package com.vik.test.Enemys;
+package Enemys;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -12,14 +12,20 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.vik.test.MyClass;
-import com.vik.test.PlayerController;
+
+import net.mgsx.gltf.loaders.glb.GLBLoader;
+import net.mgsx.gltf.scene3d.scene.Scene;
+import net.mgsx.gltf.scene3d.scene.SceneAsset;
+
+import static com.vik.test.MyClass.*;
+import static com.vik.test.MyClass.pc;
 
 public abstract class Enemy {
 
     protected float HP=100f;
     protected float Damage = 10f;
 
-    protected ModelInstance getModelInstance() {
+    public ModelInstance getModelInstance() {
         return modelInstance;
     }
 
@@ -39,24 +45,24 @@ public abstract class Enemy {
     protected float moveSpeed = 2f;
     protected Vector3 moveVector;
     protected Vector3 tmpVector;
-
     public Enemy(float x, float z){
         position = new Vector3(x+0.5f,0.5f,z+0.5f);
         moveVector = new Vector3();
         tmpVector = new Vector3();
+
         modelInstance = new ModelInstance(new ModelBuilder()
                 .createBox(0.25f, 0.25f, 0.25f, new Material(ColorAttribute.createAmbient(Color.BLACK)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
         );
         modelInstance.transform.translate(x+0.5f,0.5f,z+0.5f);
 
-        MyClass.instances.add(modelInstance);
-
+        instances.add(modelInstance);
     }
 
     public void Update(){
         Vector3 position1 = new Vector3(), position2 = new Vector3();
         direction = new Vector3();
-        position2.set(MyClass.pc.cam.position.x,MyClass.pc.cam.position.y,MyClass.pc.cam.position.z);
+        position2.set(pc.cam.position.x,pc.cam.position.y,pc.cam.position.z);
+
         modelInstance.transform.getTranslation(position1);
         direction = (position2).sub(position1).nor();
 
@@ -70,14 +76,13 @@ public abstract class Enemy {
         instanceRotation.getRotation(quaternion);
 
         modelInstance.transform.set(position1, quaternion);
-
         ChangeUpdate(direction,quaternion);
     }
-
+ 
     public Boolean ifSeePlayer(Vector3 direction){
         Vector3 tmp = new Vector3();
         tmp.set(position).mulAdd(direction, -2f);
-        if(PlayerController.position.dst2(position) < (16) * (16) && MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
+        if(pc.position.dst2(position) < (16) * (16) && mapLevel.lineOfSightCheap(position, pc.position)){
            return true;
         }
         return false;
@@ -104,8 +109,10 @@ public abstract class Enemy {
         }
     }
 
+
     public void Die(){
         EnemyManager.RemoveEnemy(this);
+
     }
 
 

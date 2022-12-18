@@ -1,12 +1,16 @@
 package com.vik.test;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
@@ -46,8 +50,9 @@ public class Level {
 
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
-        Material material = new Material(ColorAttribute.createDiffuse(Color.GRAY));
-        MeshPartBuilder builder = modelBuilder.part("testplane", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, material);
+        Texture brickTexture = new Texture(Gdx.files.internal("brick_dark.jpg"));
+        Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));
+        MeshPartBuilder builder = modelBuilder.part("testplane", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, brickMaterial);
         builder.rect(0, 0, Size,
                 Size, 0, Size,
                 Size, 0, 0,
@@ -90,7 +95,7 @@ public class Level {
         for(int i = 0; i<this.Size;i++){
             for(int j = 0; j<this.Size;j++){
                 if(mapArr[i][j] == 0){
-                    wallsList.add(new Wall(i,j,this.world));
+                    wallsList.add(new Wall(i,j));
                 }
             }
         }

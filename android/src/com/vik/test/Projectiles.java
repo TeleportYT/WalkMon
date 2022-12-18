@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.vik.test.Enemys.Duplicator;
-import com.vik.test.Enemys.Enemy;
-import com.vik.test.Enemys.EnemyManager;
-import com.vik.test.Enemys.Warrior;
+
+import Enemys.Enemy;
 
 public class Projectiles {
 
@@ -44,28 +42,6 @@ public class Projectiles {
 
         float colX = position.x==0 ? 0 : (position.x>0 ? .25f : -0.25f);
         float colZ = position.z==0 ? 0 : (position.z>0 ? .25f : -.25f);
-
-        if(PlayerController.position.dst2(position) < (0.5) * (0.5)){
-            Collision("Player",null);
-        }
-
-            for (Enemy enemy: EnemyManager.enemyies) {
-                if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
-                    Collision("Enemy",enemy);
-                    break;
-                }
-            }
-
-        for (Duplicator duplicator : EnemyManager.Duplicators){
-            if(!duplicator.getMinions().isEmpty()){
-                for (Warrior enemy: duplicator.getMinions()){
-                    if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
-                        Collision("Enemy",enemy);
-                        break;
-                    }
-                }
-            }
-        }
 
         model.transform.set(position,quaternion);
 

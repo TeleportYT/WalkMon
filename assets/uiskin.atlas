@@ -173,25 +173,25 @@ list-selection
 loading-bar
   rotate: false
   xy: 376, 237
-  size: 202, 18
+  size: 202, 30
   split: 0, 0, 0, 0
   pad: 5, 0, 0, 0
-  orig: 202, 18
+  orig: 202, 30
   offset: 0, 0
   index: -1
 loading-bar-fill
   rotate: false
   xy: 902, 199
-  size: 12, 18
+  size: 12, 30
   split: 0, 11, 0, 0
-  orig: 12, 18
+  orig: 12, 30
   offset: 0, 0
   index: -1
 loading-bar-knob
   rotate: false
   xy: 915, 199
-  size: 12, 18
-  orig: 12, 18
+  size: 12, 30
+  orig: 12, 30
   offset: 0, 0
   index: -1
 minus

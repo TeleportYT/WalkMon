@@ -93,4 +93,5 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
 }
 
+// put following line at bottom of the file
 eclipse.project.name = appName + "-android"

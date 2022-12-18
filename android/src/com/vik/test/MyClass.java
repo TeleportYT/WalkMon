@@ -9,21 +9,20 @@ import android.widget.Toast;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.vik.test.Enemys.Bob;
-import com.vik.test.Enemys.Duplicator;
-import com.vik.test.Enemys.EnemyManager;
-import com.vik.test.Enemys.Warrior;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+import Enemys.EnemyManager;
 
 
 public class MyClass extends ApplicationAdapter {
@@ -39,7 +38,7 @@ public class MyClass extends ApplicationAdapter {
 
     private World world;
 	public static GameUI GameUI;
-	private Stage st;
+	public static GameScene scene;
 
 
 
@@ -58,6 +57,8 @@ public class MyClass extends ApplicationAdapter {
         context.registerReceiver(receiver,intentFilter);
 
 
+
+
         modelBuilder = new ModelBuilder();
 		// load world
 		world = new World();
@@ -67,6 +68,8 @@ public class MyClass extends ApplicationAdapter {
 		cam.near = .10f;
 		cam.far = 30f;
 		cam.update();
+		scene = new GameScene(cam);
+
 		// setup controller for camera
 		camController = new FirstPersonCameraController(cam);
 		instances = new ArrayList<>();
@@ -83,7 +86,7 @@ public class MyClass extends ApplicationAdapter {
 		enemies = new EnemyManager();
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(com.vik.test.GameUI.st);
+		multiplexer.addProcessor(GameUI.st);
 		multiplexer.addProcessor(camController);
         Gdx.input.setInputProcessor(multiplexer);
 
@@ -94,9 +97,6 @@ public class MyClass extends ApplicationAdapter {
 	private void loadPlayer() {
 		// setup player
 		pc = new PlayerController(cam);
-		//enemies.AddEnemy(new Bob(mapLevel.startX, mapLevel.startY));
-		//enemies.AddEnemy(new Warrior(mapLevel.startX, mapLevel.startY));
-		//enemies.AddEnemy(new Duplicator(mapLevel.startX, mapLevel.startY));
 	}
 
 	@Override
@@ -118,6 +118,7 @@ public class MyClass extends ApplicationAdapter {
 
 
 
+		scene.Update(cam);
 
 		modelBatch.begin(cam);
 		modelBatch.render(instances, world.getEnvironment());
@@ -127,14 +128,14 @@ public class MyClass extends ApplicationAdapter {
 
 
 
-		com.vik.test.GameUI.st.act(Gdx.graphics.getDeltaTime());
-		com.vik.test.GameUI.st.draw();
+		GameUI.st.act(Gdx.graphics.getDeltaTime());
+		GameUI.st.draw();
 
 	}
 
 	@Override
 	public void dispose () {
-		st.dispose();
+		GameUI.st.dispose();
 		modelBatch.dispose();
 		world.Dispose();
 	}

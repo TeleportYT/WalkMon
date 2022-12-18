@@ -1,12 +1,9 @@
-package com.vik.test.Enemys;
+package Enemys;
 
-import static com.vik.test.MyClass.enemies;
 import static com.vik.test.MyClass.mapLevel;
-import static com.vik.test.MyClass.pc;
 
 import com.vik.test.FireballManager;
 import com.vik.test.MyClass;
-import com.vik.test.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +85,12 @@ public class EnemyManager {
         enemyies.add(enemy);
     }
     public static void RemoveEnemy(Enemy enemy){
+        if(enemy instanceof Duplicator){
+            Duplicators.remove(enemy);
+        }
+        else{
             enemyies.remove(enemy);
+        }
             MyClass.instances.remove(enemy.getModelInstance());
     }
 

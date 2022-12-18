@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
-import com.vik.test.Enemys.Enemy;
 
 public class FireBall extends Projectiles{
 
@@ -21,13 +20,18 @@ public class FireBall extends Projectiles{
     }
 
     @Override
-    public void Collision(String collidorName, Enemy enemy){
-        if(collidorName.equals("Player")){
+    public void Update() {
+        if(PlayerController.position.dst2(position) < (0.5) * (0.5)){
+            Collision();
+        }
+        super.Update();
+    }
+
+    public void Collision(){
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
             Gdx.app.debug("Enemy","i see you");
             MyClass.pc.Damage(this.damage);
             MyClass.instances.remove(this.model);
             FireballManager.fireballs.remove(this);
-        }
     }
 }

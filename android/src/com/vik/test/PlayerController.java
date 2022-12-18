@@ -52,7 +52,6 @@ public class PlayerController
     }
 
     public void update() {
-        // make sure to activate the player body so bullet doesnt put it to sleep
         blManager.Update();
         MovePlayer(this.knob.th.getKnobPercentX(),this.knob.th.getKnobPercentY());
         if(this.knob.shotBt.isPressed() && !attack){

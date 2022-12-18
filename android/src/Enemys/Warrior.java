@@ -1,4 +1,6 @@
-package com.vik.test.Enemys;
+package Enemys;
+
+import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Quaternion;
@@ -44,5 +46,11 @@ public class Warrior extends Enemy{
     @Override
     public void Attack(Vector3 direction){
         MyClass.pc.Damage(2f);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

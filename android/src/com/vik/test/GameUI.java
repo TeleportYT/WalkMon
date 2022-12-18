@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,8 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -43,22 +45,21 @@ public class GameUI {
         intentFilter.addAction("Player Healed");
         MyClass.context.registerReceiver(receiver,intentFilter);
 
-
-
        this.st = new Stage(new ScreenViewport());
        this.skin = new Skin(Gdx.files.internal("uiskin.json"));
        Skin mySkin = new Skin(Gdx.files.internal("fire_button.json"));
+       Skin neon = new Skin(Gdx.files.internal("neon-ui.json"));
        this.th = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
-       th.setSize(500,500);
-       th.setBounds(10,10,500,500);
+       th.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
+       th.setBounds(10,10,st.getHeight()/2.5f,st.getHeight()/2.5f);
 
        this.shotBt = new Button(mySkin.get(Button.ButtonStyle.class));
-       shotBt.setSize(250f,250f);
-       shotBt.setPosition(st.getWidth()-375f,125f);
+       shotBt.setSize(st.getHeight()/4,st.getHeight()/4);
+       shotBt.setPosition(st.getWidth()-st.getHeight()/3 ,st.getHeight()/8);
 
        crossair = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("crossair.png")))));
-       crossair.setSize(250f,250f);
-       crossair.setPosition(st.getWidth()/2-125f,st.getHeight()/2-125f);
+       crossair.setSize(st.getHeight()/4,st.getHeight()/4);
+       crossair.setPosition(st.getWidth()/2-st.getHeight()/8,st.getHeight()/2-st.getHeight()/8);
 
        BloodEffect = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("bloodEffect.png")))));
        BloodEffect.setColor(255,255,255,0);
