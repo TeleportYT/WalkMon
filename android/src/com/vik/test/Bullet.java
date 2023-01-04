@@ -33,6 +33,14 @@ public class Bullet extends Projectiles {
             }
         }
 
+        for(Enemy enemy : EnemyManager.Duplicators){
+            if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+                Collision(enemy);
+                break;
+            }
+        }
+
+
         if(!EnemyManager.Duplicators.isEmpty()){
             for (Duplicator duplicator : EnemyManager.Duplicators){
                 if(!duplicator.getMinions().isEmpty()){

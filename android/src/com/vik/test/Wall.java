@@ -30,13 +30,13 @@ public class Wall {
     private float x,z;
 
 
-    public Wall(float x, float z){
+    public Wall(float x, float z,float y){
         ModelBuilder modelBuilder = new ModelBuilder();
         this.md = CreateBox();
         this.mi = new ModelInstance(this.md);
         this.x = x;
         this.z = z;
-        this.mi.transform.setToTranslation(x+0.5f,0.5f,z+0.5f);
+        this.mi.transform.setToTranslation(x+0.5f,y,z+0.5f);
         MyClass.instances.add(mi);
     }
 

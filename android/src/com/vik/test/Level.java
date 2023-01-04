@@ -22,6 +22,7 @@ import java.util.List;
 public class Level {
     private int[][] mapArr;
     private List<Wall> wallsList;
+    private List<Floor> floorsList;
 
     public int getSize() {
         return Size;
@@ -40,6 +41,7 @@ public class Level {
         this.world = world;
         mapArr = new int[this.Size][this.Size];
         this.wallsList = new ArrayList<>();
+        this.floorsList = new ArrayList<>();
         int currentRow = (int)Math.floor(Math.random()*this.Size);
         int currentColumn = (int)Math.floor(Math.random()*this.Size);
         this.startX = currentRow;
@@ -47,21 +49,6 @@ public class Level {
         int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
         int[] nextDirection = new int[2];
         int[] lastDirection = new int[2];
-
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.begin();
-        Texture brickTexture = new Texture(Gdx.files.internal("brick_dark.jpg"));
-        Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));
-        MeshPartBuilder builder = modelBuilder.part("testplane", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, brickMaterial);
-        builder.rect(0, 0, Size,
-                Size, 0, Size,
-                Size, 0, 0,
-                0, 0, 0,
-                0, 2, 0);
-        builder.setVertexTransform(new Matrix4().rotate(new Vector3(1,0,1),90));
-        Model model = modelBuilder.end();
-        ModelInstance modelInstance = new ModelInstance(model);
-        MyClass.instances.add(modelInstance);
 
         while (this.maxTunnels>0 && this.Size>0 && this.maxLength>0) {
             do {
@@ -95,10 +82,21 @@ public class Level {
         for(int i = 0; i<this.Size;i++){
             for(int j = 0; j<this.Size;j++){
                 if(mapArr[i][j] == 0){
-                    wallsList.add(new Wall(i,j));
+                    wallsList.add(new Wall(i,j,0.5f));
+                }
+                else{
+                    floorsList.add(new Floor(i,0,j,0));
+                    floorsList.add(new Floor(i,1,j,180));
                 }
             }
         }
+
+
+
+
+
+
+
     }
 
     public int getCollision(int x, int y){

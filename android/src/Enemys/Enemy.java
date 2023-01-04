@@ -19,6 +19,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 import static com.vik.test.MyClass.*;
 import static com.vik.test.MyClass.pc;
+import static Enemys.EnemyManager.Duplicators;
 
 public abstract class Enemy {
 
@@ -112,7 +113,6 @@ public abstract class Enemy {
 
     public void Die(){
         EnemyManager.RemoveEnemy(this);
-
     }
 
 
