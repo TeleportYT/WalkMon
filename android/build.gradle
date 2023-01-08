@@ -1,3 +1,4 @@
+apply plugin: 'com.google.gms.google-services'
 android {
     buildToolsVersion "32.0.0"
     compileSdkVersion 32
@@ -22,6 +23,8 @@ android {
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
@@ -91,6 +94,9 @@ task run(type: Exec) {
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation 'com.google.firebase:firebase-database:20.1.0'
+    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 }
 
 // put following line at bottom of the file

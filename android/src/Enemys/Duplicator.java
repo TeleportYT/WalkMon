@@ -1,6 +1,5 @@
 package Enemys;
 
-import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 
@@ -58,7 +57,6 @@ public class Duplicator extends Enemy{
         super.Die();
     }
 
-    @NonNull
     @Override
     public String toString() {
         return super.toString();
