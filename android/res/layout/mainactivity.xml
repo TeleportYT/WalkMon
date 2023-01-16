@@ -11,22 +11,119 @@
         android:id="@+id/Bitch"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Button"
+        android:autoSizeTextType="uniform"
+        android:background="#00FFFFFF"
+        android:fontFamily="@font/gungeon"
+        android:lines="1"
+        android:text="Play"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintWidth_percent="0.15"
+        app:layout_constraintStart_toStartOf="@+id/button"
+/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeTextType="uniform"
+        android:background="#00FFFFFF"
+        android:fontFamily="@font/gungeon"
+
+        android:lines="1"
+        android:text="Settings"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
+        app:layout_constraintVertical_bias="0.53"
+        app:layout_constraintWidth_percent="0.15" />
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/sign_in_button"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
-        android:text="Button"
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeTextType="uniform"
+        android:background="#00FFFFFF"
+        android:fontFamily="@font/gungeon"
+        android:lines="1"
+        android:text="About Me"
+        app:layout_constraintEnd_toEndOf="@+id/button"
+        app:layout_constraintStart_toStartOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintWidth_percent="0.15"/>
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeTextType="uniform"
+        android:background="#00FFFFFF"
+        android:fontFamily="@font/gungeon"
+        android:lines="1"
+        android:text="QUIT"
+        app:layout_constraintEnd_toEndOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintWidth_percent="0.15"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:autoSizeTextType="uniform"
+        android:elevation="1dp"
+        android:fontFamily="@font/gungeon"
+        android:gravity="center"
+        android:lines="1"
+        android:text="WalkMon"
+        android:textAllCaps="true"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/Bitch"
+        app:layout_constraintEnd_toEndOf="@+id/Bitch"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="@+id/Bitch"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.61"
+        app:layout_constraintWidth_percent="0.75" />
+
+    <LinearLayout
+        android:id="@+id/lt"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHorizontal_bias="0.02"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        app:layout_constraintWidth_percent="0.25">
+
+        <ImageView
+            android:id="@+id/pfp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8" />
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.2"
+            android:autoSizeTextType="uniform"
+            android:lines="1"
+            android:text="Vivien" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

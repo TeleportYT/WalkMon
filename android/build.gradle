@@ -97,7 +97,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.1.0'
     implementation 'com.google.firebase:firebase-auth:21.1.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.squareup.picasso:picasso:2.8'
 }
+
 
 // put following line at bottom of the file
 eclipse.project.name = appName + "-android"
