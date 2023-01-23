@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -77,7 +79,18 @@ public class AndroidLauncher extends AndroidApplication {
 		username = findViewById(R.id.username);
 		pfp = findViewById(R.id.pfp);
 
-
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				LoadingScreen game = new LoadingScreen();
+				Gdx.app.postRunnable(new Runnable() {
+					@Override
+					public void run() {
+						cl = game;
+					}
+				});
+			}
+		}).start();
 
 
 	}

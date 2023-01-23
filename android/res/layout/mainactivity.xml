@@ -122,8 +122,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:autoSizeTextType="uniform"
-            android:lines="1"
-            android:text="Vivien" />
+            android:lines="1" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.Application;
@@ -37,6 +38,7 @@ public class GameUI {
     public Button shotBt;
     public Image crossair;
     public Image BloodEffect;
+    public Image Loading;
 
     public GameUI(){
         IntentFilter intentFilter = new IntentFilter("Player Damaged");

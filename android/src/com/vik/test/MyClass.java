@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -25,7 +26,7 @@ import java.util.List;
 import Enemys.EnemyManager;
 
 
-public class MyClass extends ApplicationAdapter {
+public class MyClass implements Screen {
 	public static Context context;
 	private PerspectiveCamera cam;
 	public static Level mapLevel;
@@ -40,13 +41,20 @@ public class MyClass extends ApplicationAdapter {
 	public static GameUI GameUI;
 	public static GameScene scene;
 
+	private boolean isRunning = false;
 
 
     public MyClass(Context ct){
     	context = ct;
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				create();
+			}
+		});
 	}
 
-	@Override
+
 	public void create () {
 
 
@@ -74,16 +82,19 @@ public class MyClass extends ApplicationAdapter {
 		camController = new FirstPersonCameraController(cam);
 		instances = new ArrayList<>();
 		modelBatch = new ModelBatch();
-		mapLevel = new Level(20,8,50,world);
-		List<Wall> walls = mapLevel.getWalls();
 
-		for (int i = 0; i < walls.size(); i++){
-			instances.add(walls.get(i).getMi());
-		}
+				mapLevel = new Level(20,8,50,world);
+				List<Wall> walls = mapLevel.getWalls();
 
-		cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
+				for (int i = 0; i < walls.size(); i++){
+					instances.add(walls.get(i).getMi());
+				}
+				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
+				enemies = new EnemyManager();
+
+
 		GameUI = new GameUI();
-		enemies = new EnemyManager();
+
 
 		InputMultiplexer multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(GameUI.st);
@@ -97,10 +108,11 @@ public class MyClass extends ApplicationAdapter {
 	private void loadPlayer() {
 		// setup player
 		pc = new PlayerController(cam);
+		isRunning = true;
 	}
 
 	@Override
-	public void render () {
+	public void render (float delta) {
 
 		camController.update();
 		cam.position.y = 0.5f;
@@ -134,6 +146,32 @@ public class MyClass extends ApplicationAdapter {
 	}
 
 	@Override
+	public void show() {
+
+	}
+
+
+	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void hide() {
+
+	}
+
+	@Override
 	public void dispose () {
 		GameUI.st.dispose();
 		modelBatch.dispose();
@@ -158,6 +196,10 @@ public class MyClass extends ApplicationAdapter {
 			}
 		}
 	};
+
+	public boolean isRunning() {
+		return isRunning;
+	}
 	//endregion
 
 }
