@@ -1,6 +1,7 @@
 package com.vik.test;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,21 +12,20 @@ public class GameManager extends Game {
     public void create() {
         lt = new LoadingScreen();
         setScreen(lt);
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                MyClass game = new MyClass(ct);
-                //game.Load();
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
+        lt.show();
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               MyClass game  = new MyClass(ct);
+               game.Load();
+               Gdx.app.postRunnable(new Runnable() {
+                   @Override
+                   public void run() {
                        cl = game;
-                       cl.Load();
-                    }
-                });
-            }
-        }).start();
+                   }
+               });
+           }
+       }).start();
 
     }
     public boolean isFirst = false;
@@ -75,6 +75,9 @@ public class GameManager extends Game {
         }
         else if (cl.isLoaded()){
             cl.render(Gdx.graphics.getDeltaTime());
+        }
+        else{
+            MyClass.manager.update();
         }
     }
 }

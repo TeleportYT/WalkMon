@@ -87,9 +87,10 @@ public class AndroidLauncher extends AndroidApplication {
 	public void OnClick(View v) {
 		ConstraintLayout l = (ConstraintLayout) findViewById(R.id.ct);
 		l.removeAllViews();
-		finish();
-		Intent intent = new Intent(this, MainActivity.class);
-		startActivity(intent);
+		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useAccelerometer = false;
+		config.useCompass = false;
+		l.addView(initializeForView(new GameManager(getContext()),config));
 	}
 
 	@Override

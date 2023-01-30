@@ -59,7 +59,6 @@ public class MyClass implements Screen {
 		manager.load("floor.png",Texture.class);
 		manager.load("uiskin.json", Skin.class);
 		manager.load("fire_button.json",Skin.class);
-		manager.finishLoading();
 
 	}
 
@@ -184,6 +183,7 @@ public class MyClass implements Screen {
 		GameUI.st.dispose();
 		modelBatch.dispose();
 		world.Dispose();
+		manager.dispose();
 	}
 
 
@@ -205,9 +205,6 @@ public class MyClass implements Screen {
 		}
 	};
 
-	public boolean isRunning() {
-		return isRunning;
-	}
 	//endregion
 
 }
