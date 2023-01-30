@@ -10,6 +10,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 
 import java.util.ArrayList;
@@ -40,20 +42,26 @@ public class MyClass implements Screen {
     private World world;
 	public static GameUI GameUI;
 	public static GameScene scene;
-
+	public static AssetManager manager;
 	private boolean isRunning = false;
 
+	public boolean isLoaded(){
+		return manager.isFinished();
+	}
 
     public MyClass(Context ct){
     	context = ct;
-		Gdx.app.postRunnable(new Runnable() {
-			@Override
-			public void run() {
-				create();
-			}
-		});
 	}
+	public void Load(){
 
+		manager = new AssetManager();
+		manager.load("dungeon.png",Texture.class);
+		manager.load("floor.png",Texture.class);
+		manager.load("uiskin.json", Skin.class);
+		manager.load("fire_button.json",Skin.class);
+		manager.finishLoading();
+
+	}
 
 	public void create () {
 
@@ -147,7 +155,7 @@ public class MyClass implements Screen {
 
 	@Override
 	public void show() {
-
+		create();
 	}
 
 

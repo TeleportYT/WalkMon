@@ -9,16 +9,19 @@ public class GameManager extends Game {
 
     @Override
     public void create() {
+        lt = new LoadingScreen();
         setScreen(lt);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 MyClass game = new MyClass(ct);
+                //game.Load();
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
                        cl = game;
+                       cl.Load();
                     }
                 });
             }
@@ -63,16 +66,15 @@ public class GameManager extends Game {
             return;
         }
 
+        if(cl.isLoaded() && !isFirst){
+            isFirst = true;
+            setScreen(cl);
+            cl.show();
 
-        if(cl.isRunning() && isFirst){
-           setScreen(cl);
-           cl.show();
+
         }
-        else if (cl.isRunning() && !isFirst){
+        else if (cl.isLoaded()){
             cl.render(Gdx.graphics.getDeltaTime());
-        }
-        else{
-            lt.render(Gdx.graphics.getDeltaTime());
         }
     }
 }

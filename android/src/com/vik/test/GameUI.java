@@ -4,28 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -48,9 +37,8 @@ public class GameUI {
         MyClass.context.registerReceiver(receiver,intentFilter);
 
        this.st = new Stage(new ScreenViewport());
-       this.skin = new Skin(Gdx.files.internal("uiskin.json"));
-       Skin mySkin = new Skin(Gdx.files.internal("fire_button.json"));
-       Skin neon = new Skin(Gdx.files.internal("neon-ui.json"));
+       this.skin = MyClass.manager.get("uiskin.json",Skin.class);
+       Skin mySkin = MyClass.manager.get("fire_button.json",Skin.class);
        this.th = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
        th.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
        th.setBounds(10,10,st.getHeight()/2.5f,st.getHeight()/2.5f);

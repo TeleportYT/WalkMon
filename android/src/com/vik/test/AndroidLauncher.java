@@ -79,18 +79,6 @@ public class AndroidLauncher extends AndroidApplication {
 		username = findViewById(R.id.username);
 		pfp = findViewById(R.id.pfp);
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				LoadingScreen game = new LoadingScreen();
-				Gdx.app.postRunnable(new Runnable() {
-					@Override
-					public void run() {
-						cl = game;
-					}
-				});
-			}
-		}).start();
 
 
 	}
@@ -106,9 +94,11 @@ public class AndroidLauncher extends AndroidApplication {
 
 	@Override
 	protected void onStart() {
+		/*
 		mGoogleSignInClient.signOut();
 		Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 		startActivityForResult(signInIntent, RC_SIGN_IN);
+		*/
 		super.onStart();
 	}
 

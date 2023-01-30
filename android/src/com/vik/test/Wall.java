@@ -46,7 +46,7 @@ public class Wall {
 
     public Model CreateBox(){
         // Load the brick texture from a file
-        Texture brickTexture = new Texture(Gdx.files.internal("dungeon.png"));
+        Texture brickTexture = MyClass.manager.get("dungeon.png",Texture.class);
 
 // Create a new Material
         Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));

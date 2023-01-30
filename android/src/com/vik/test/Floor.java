@@ -39,7 +39,7 @@ public class Floor {
    public Model BuildFloor(){
        ModelBuilder modelBuilder = new ModelBuilder();
        modelBuilder.begin();
-       Texture brickTexture = new Texture(Gdx.files.internal("floor.png"));
+       Texture brickTexture = MyClass.manager.get("floor.png",Texture.class);
        Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));
        MeshPartBuilder builder = modelBuilder.part("floor", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, brickMaterial);
        builder.rect(0, 0, 1,
