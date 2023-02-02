@@ -23,11 +23,9 @@ public class GameUI {
 
     public static Stage st;
     private Skin skin;
-    public Touchpad th;
-    public Button shotBt;
+    public Touchpad th,shoot;
     public Image crossair;
     public Image BloodEffect;
-    public Image Loading;
 
     public GameUI(){
         IntentFilter intentFilter = new IntentFilter("Player Damaged");
@@ -39,13 +37,14 @@ public class GameUI {
        this.st = new Stage(new ScreenViewport());
        this.skin = MyClass.manager.get("uiskin.json",Skin.class);
        Skin mySkin = MyClass.manager.get("fire_button.json",Skin.class);
+
        this.th = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
        th.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
        th.setBounds(10,10,st.getHeight()/2.5f,st.getHeight()/2.5f);
 
-       this.shotBt = new Button(mySkin.get(Button.ButtonStyle.class));
-       shotBt.setSize(st.getHeight()/4,st.getHeight()/4);
-       shotBt.setPosition(st.getWidth()-st.getHeight()/3 ,st.getHeight()/8);
+       this.shoot = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
+       shoot.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
+       shoot.setBounds(st.getWidth()-st.getHeight()/3 ,st.getHeight()/8,st.getHeight()/2.5f,st.getHeight()/2.5f);
 
        crossair = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("crossair.png")))));
        crossair.setSize(st.getHeight()/4,st.getHeight()/4);
@@ -59,14 +58,11 @@ public class GameUI {
         st.addActor(BloodEffect);
         st.addActor(crossair);
         st.addActor(th);
-        st.addActor(shotBt);
+        st.addActor(shoot);
         st.draw();
     }
 
     public void Update(){
-        Gdx.app.setLogLevel(Application.LOG_DEBUG);
-        Gdx.app.debug("Game UI","Player hp is: "+MyClass.pc.hp);
-
         BloodEffect.setColor(255,255,255,1-(MyClass.pc.hp/100));
     }
 

@@ -10,9 +10,6 @@ public class GameManager extends Game {
 
     @Override
     public void create() {
-        lt = new LoadingScreen();
-        setScreen(lt);
-        lt.show();
        new Thread(new Runnable() {
            @Override
            public void run() {
@@ -33,14 +30,9 @@ public class GameManager extends Game {
     MyClass cl;
     Context ct;
 
-    public GameManager(LoadingScreen lt) {
-        this.lt = lt;
-    }
-
-    LoadingScreen lt;
-
     public GameManager(Context ct) {
         this.ct = ct;
+
     }
 
     @Override
@@ -62,7 +54,6 @@ public class GameManager extends Game {
     public void render() {
 
         if(cl == null){
-            lt.render(Gdx.graphics.getDeltaTime());
             return;
         }
 
@@ -71,7 +62,6 @@ public class GameManager extends Game {
             setScreen(cl);
             cl.show();
 
-
         }
         else if (cl.isLoaded()){
             cl.render(Gdx.graphics.getDeltaTime());
@@ -79,5 +69,12 @@ public class GameManager extends Game {
         else{
             MyClass.manager.update();
         }
+    }
+
+    public boolean isLoaded() {
+        if(cl == null){
+            return false;
+        }
+        return cl.isLoaded();
     }
 }

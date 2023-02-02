@@ -5,6 +5,7 @@ import static android.content.ContentValues.TAG;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -39,46 +41,58 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 public class AndroidLauncher extends AndroidApplication {
 
 	private static final int RC_SIGN_IN = 9001;
 	private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-	private TextView username;
+	private TextView username,gameName,loadingTxt;
 	private ImageView pfp;
-
+	public ArrayList<View> views;
+	private Button play,settings,about,exit;
+	private LottieAnimationView loadingAnim;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mainactivity);
+		views = new ArrayList<View>();
 		mAuth = FirebaseAuth.getInstance();
+		LoadViews();
+	}
 
-
-		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-				.requestIdToken(getString(R.string.default_web_client_id))
-				.requestEmail()
-				.build();
-
-		mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-
-		Button bt = (Button) findViewById(R.id.Bitch);
-		bt.setOnClickListener(this::OnClick);
-
-
+	public void LoadViews(){
+		play = (Button) findViewById(R.id.Bitch);
+		play.setOnClickListener(this::OnClick);
+		views.add(play);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = false;
 		config.useCompass = false;
 
 		ConstraintLayout l = (ConstraintLayout) findViewById(R.id.ct);
-		l.addView(initializeForView(new BgMoving(), config));
-
+		View v = initializeForView(new BgMoving(), config);
+		l.addView(v);
+		views.add(v);
 		LinearLayout lt = (LinearLayout)findViewById(R.id.lt);
 
 		username = findViewById(R.id.username);
 		pfp = findViewById(R.id.pfp);
 
+		views.add(username);
+		views.add(pfp);
+
+
+		gameName = findViewById(R.id.textView2);
+		views.add(gameName);
+
+		loadingAnim = findViewById(R.id.animationView);
+		loadingTxt = findViewById(R.id.textView);
+
+		settings = findViewById(R.id.button);
+		about = findViewById(R.id.button2);
+		exit = findViewById(R.id.button3);
 
 
 	}
@@ -86,15 +100,42 @@ public class AndroidLauncher extends AndroidApplication {
 
 	public void OnClick(View v) {
 		ConstraintLayout l = (ConstraintLayout) findViewById(R.id.ct);
-		l.removeAllViews();
+		for (int i = 0; i< views.size();i++){
+			l.removeView(views.get(i));
+		}
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = false;
 		config.useCompass = false;
-		l.addView(initializeForView(new GameManager(getContext()),config));
+		loadingTxt.setVisibility(View.VISIBLE);
+		loadingAnim.setVisibility(View.VISIBLE);
+		GameManager game = new GameManager(getContext());
+		l.addView(initializeForView(game,config));
+
+		Handler mainHandler = new Handler(this.getMainLooper());
+
+		Runnable myRunnable = new Runnable() {
+			@Override
+			public void run() {
+				while(game.isLoaded()){
+					Log.d("Loading","Still Loading");
+				}
+				loadingTxt.setVisibility(View.INVISIBLE);
+				loadingAnim.setVisibility(View.INVISIBLE);
+			}
+		};
+		mainHandler.post(myRunnable);
+
 	}
+
 
 	@Override
 	protected void onStart() {
+		GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+				.requestIdToken(getString(R.string.default_web_client_id))
+				.requestEmail()
+				.build();
+
+		mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 		/*
 		mGoogleSignInClient.signOut();
 		Intent signInIntent = mGoogleSignInClient.getSignInIntent();

@@ -1,6 +1,7 @@
 package com.vik.test;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCapsuleShape;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
@@ -38,6 +40,10 @@ public class PlayerController
     private boolean attack=false;
     public static BulletManager blManager;
 
+
+    public double attackTimer = 0;
+
+
     public PlayerController(PerspectiveCamera cam) {
         hp = 100f;
         this.cam = cam;
@@ -54,12 +60,20 @@ public class PlayerController
     public void update() {
         blManager.Update();
         MovePlayer(this.knob.th.getKnobPercentX(),this.knob.th.getKnobPercentY());
-        if(this.knob.shotBt.isPressed() && !attack){
+        RotateHead(this.knob.shoot.getKnobPercentX(),this.knob.shoot.getKnobPercentY());
+        if (attackTimer >= 10){
             attack = true;
-            Fire();
+            attackTimer = 0;
         }
-        if(!this.knob.shotBt.isPressed()){
+        else if(!attack){
+            attackTimer += (0.015/Gdx.graphics.getDeltaTime());
+            Log.d("Shot","Timer: "+ attackTimer+" can attack: "+attack);
+        }
+
+        if(this.knob.shoot.isTouched() &&  attack){
+            Fire();
             attack = false;
+            attackTimer  = 0;
         }
 
         if(hp<100){
@@ -67,6 +81,38 @@ public class PlayerController
         }
 
     }
+    private float curY =0;
+
+    public void RotateHead(float x,float y){
+        float dt = Gdx.graphics.getDeltaTime();
+        Vector3 tmpView = new Vector3(0,1,0);
+        Vector3 rotateV = new Vector3();
+        rotateV.setZero();
+        int angleX = 0;
+        int angleY = 0;
+        //Movement
+        if (y>0) {
+            curY =y*moveSpeed  ;
+        }
+        if (y<0) {
+            curY =y*moveSpeed;
+        }
+        if (x<0){
+            angleX-=x*100*dt*moveSpeed;
+        }
+        if (x>0){
+           angleX-=x*100*dt*moveSpeed;
+        }
+
+
+        cam.direction.rotate(cam.up,angleX);
+
+        cam.direction.y=curY;
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Gdx.app.debug("Player Head",""+position.x+","+position.y+","+position.z);
+
+    }
+
 
     public void MovePlayer(float x,float y){
 
