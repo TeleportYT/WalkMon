@@ -80,6 +80,10 @@ public class Level {
 
 
         for(int i = 0; i<this.Size;i++){
+            wallsList.add(new Wall(-1,i,0.5f));
+            wallsList.add(new Wall(Size,i,0.5f));
+            wallsList.add(new Wall(i,-1,0.5f));
+            wallsList.add(new Wall(i,Size,0.5f));
             for(int j = 0; j<this.Size;j++){
                 if(mapArr[i][j] == 0){
                     wallsList.add(new Wall(i,j,0.5f));

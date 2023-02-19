@@ -44,7 +44,7 @@ public class GameUI {
 
        this.shoot = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
        shoot.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
-       shoot.setBounds(st.getWidth()-st.getHeight()/3 ,st.getHeight()/8,st.getHeight()/2.5f,st.getHeight()/2.5f);
+       shoot.setBounds(st.getWidth()-st.getWidth()/4.25f ,st.getHeight()/50,st.getHeight()/2.5f,st.getHeight()/2.5f);
 
        crossair = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("crossair.png")))));
        crossair.setSize(st.getHeight()/4,st.getHeight()/4);

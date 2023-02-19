@@ -81,7 +81,7 @@ public class PlayerController
         }
 
     }
-    private float curY =0;
+    private float curY =0,curX = 0;
 
     public void RotateHead(float x,float y){
         float dt = Gdx.graphics.getDeltaTime();
@@ -98,19 +98,20 @@ public class PlayerController
             curY =y*moveSpeed;
         }
         if (x<0){
-            angleX-=x*100*dt*moveSpeed;
+            curX = x;
         }
         if (x>0){
-           angleX-=x*100*dt*moveSpeed;
+            curX = x;
         }
 
 
-        cam.direction.rotate(cam.up,angleX);
+        cam.direction.x += curX*dt;
+
 
         cam.direction.y=curY;
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
         Gdx.app.debug("Player Head",""+position.x+","+position.y+","+position.z);
-
+        Gdx.app.debug("Player Head",""+x+","+y);
     }
 
 
