@@ -34,7 +34,7 @@ public class MyClass implements Screen {
 	public static Level mapLevel;
 	public ModelBatch modelBatch;
 	public ModelBuilder modelBuilder;
-    private FirstPersonCameraController camController;
+    private MyFPS camController;
     public static PlayerController pc;
     public static List<ModelInstance> instances;
     public static EnemyManager enemies;
@@ -86,7 +86,7 @@ public class MyClass implements Screen {
 		scene = new GameScene(cam);
 
 		// setup controller for camera
-		camController = new FirstPersonCameraController(cam);
+		camController = new MyFPS(cam);
 		instances = new ArrayList<>();
 		modelBatch = new ModelBatch();
 
@@ -115,6 +115,7 @@ public class MyClass implements Screen {
 	private void loadPlayer() {
 		// setup player
 		pc = new PlayerController(cam);
+		camController.setPl(pc);
 		isRunning = true;
 	}
 

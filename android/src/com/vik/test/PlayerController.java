@@ -60,7 +60,6 @@ public class PlayerController
     public void update() {
         blManager.Update();
         MovePlayer(this.knob.th.getKnobPercentX(),this.knob.th.getKnobPercentY());
-        RotateHead(this.knob.shoot.getKnobPercentX(),this.knob.shoot.getKnobPercentY());
         if (attackTimer >= 10){
             attack = true;
             attackTimer = 0;
@@ -70,48 +69,10 @@ public class PlayerController
             Log.d("Shot","Timer: "+ attackTimer+" can attack: "+attack);
         }
 
-        if(this.knob.shoot.isTouched() &&  attack){
-            Fire();
-            attack = false;
-            attackTimer  = 0;
-        }
-
         if(hp<100){
             hp+= 1*Gdx.graphics.getDeltaTime();
         }
 
-    }
-    private float curY =0,curX = 0;
-
-    public void RotateHead(float x,float y){
-        float dt = Gdx.graphics.getDeltaTime();
-        Vector3 tmpView = new Vector3(0,1,0);
-        Vector3 rotateV = new Vector3();
-        rotateV.setZero();
-        int angleX = 0;
-        int angleY = 0;
-        //Movement
-        if (y>0) {
-            curY =y*moveSpeed  ;
-        }
-        if (y<0) {
-            curY =y*moveSpeed;
-        }
-        if (x<0){
-            curX = x;
-        }
-        if (x>0){
-            curX = x;
-        }
-
-
-        cam.direction.x += curX*dt;
-
-
-        cam.direction.y=curY;
-        Gdx.app.setLogLevel(Application.LOG_DEBUG);
-        Gdx.app.debug("Player Head",""+position.x+","+position.y+","+position.z);
-        Gdx.app.debug("Player Head",""+x+","+y);
     }
 
 
@@ -166,9 +127,14 @@ public class PlayerController
     }
 
     public void Fire(){
+        if (!attack){
+            return;
+        }
         Vector3 tmp = new Vector3();
         tmp.set(-cam.direction.x, -cam.direction.y, -cam.direction.z);
         blManager.AddBullet(new Bullet(10,10f,position,tmp));
+        attack = false;
+        attackTimer  = 0;
     }
 
 
