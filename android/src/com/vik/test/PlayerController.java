@@ -60,7 +60,7 @@ public class PlayerController
     public void update() {
         blManager.Update();
         MovePlayer(this.knob.th.getKnobPercentX(),this.knob.th.getKnobPercentY());
-        if (attackTimer >= 10){
+        if (attackTimer >= 50){
             attack = true;
             attackTimer = 0;
         }
@@ -154,7 +154,8 @@ public class PlayerController
     public void Die(){
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
         Gdx.app.debug("Player Dead","You are dead");
-        //cam.
+        Intent intent=new Intent("Player Dead");
+        MyClass.context.sendBroadcast(intent);
     }
 
 }

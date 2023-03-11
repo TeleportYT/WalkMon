@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
 
 
 import java.util.ArrayList;
@@ -38,12 +41,13 @@ public class MyClass implements Screen {
     public static PlayerController pc;
     public static List<ModelInstance> instances;
     public static EnemyManager enemies;
-
+	public static GameStats stats;
     private World world;
 	public static GameUI GameUI;
 	public static GameScene scene;
 	public static AssetManager manager;
 	private boolean isRunning = false;
+	private double gameTime=0;
 
 	public boolean isLoaded(){
 		return manager.isFinished();
@@ -69,6 +73,7 @@ public class MyClass implements Screen {
 		intentFilter.addAction("Player Dead");
 		intentFilter.addAction("Pause Game");
 		intentFilter.addAction("Player Healed");
+		intentFilter.addAction("Stage Cleared");
         context.registerReceiver(receiver,intentFilter);
 
 
@@ -97,7 +102,7 @@ public class MyClass implements Screen {
 					instances.add(walls.get(i).getMi());
 				}
 				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-				enemies = new EnemyManager();
+				enemies = new EnemyManager(Difficulty.Easy);
 
 
 		GameUI = new GameUI();
@@ -116,12 +121,15 @@ public class MyClass implements Screen {
 		// setup player
 		pc = new PlayerController(cam);
 		camController.setPl(pc);
+		stats = new GameStats();
 		isRunning = true;
 	}
 
 	@Override
 	public void render (float delta) {
-
+		Log.d("Delta","F: "+Gdx.graphics.getDeltaTime()+" G: "+delta);
+		gameTime+=Gdx.graphics.getDeltaTime();
+		Log.d("TimeD","F: "+gameTime);
 		camController.update();
 		cam.position.y = 0.5f;
 		world.Update(Gdx.graphics.getDeltaTime());
@@ -193,15 +201,34 @@ public class MyClass implements Screen {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals("Player Damaged")){
-				Toast.makeText(context,"Player Damaged",Toast.LENGTH_SHORT).show();
+
 			}
 			else if(intent.getAction().equals("Player Dead")){
-				Toast.makeText(context,"Player Died",Toast.LENGTH_SHORT);
+				Intent nt = new Intent(((AndroidApplication) Gdx.app).getContext(), GameOver.class);
+				float minutes = (float)Math.floor(gameTime / 60.0f);
+				float seconds = (float)(gameTime - minutes * 60.0f);
+				Log.d("Time","GameTime: "+gameTime+" MINs "+minutes+" "+seconds);
+				stats.setTime(String.format("%.0fm%.0fs", minutes, seconds));
+				stats.setPlayerHealth(0);
+				nt.putExtra("StatsId",stats.FinishGame(GameState.Lose,((AndroidApplication) Gdx.app).getContext()));
+				((AndroidApplication) Gdx.app).finish();
+				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
 			else if(intent.getAction().equals("Pause Game")){
 			}
 			else if(intent.getAction().equals("Player Healed")){
 
+			}
+			else if(intent.getAction().equals("Stage Cleared")){
+				Intent nt = new Intent(((AndroidApplication) Gdx.app).getContext(), GameOver.class);
+				float minutes = (float)Math.floor(gameTime / 60.0f);
+				float seconds = (float)(gameTime - minutes * 60.0f);
+				Log.d("Time","GameTime: "+gameTime+" MINs "+minutes+" "+seconds);
+				stats.setTime(String.format("%.0fm%.0fs", minutes, seconds));
+				stats.setPlayerHealth(pc.hp);
+				nt.putExtra("StatsId",stats.FinishGame(GameState.Win,((AndroidApplication) Gdx.app).getContext()));
+				((AndroidApplication) Gdx.app).finish();
+				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
 		}
 	};

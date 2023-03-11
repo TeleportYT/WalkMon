@@ -1,7 +1,15 @@
 package Enemys;
 
+import static com.vik.test.MyClass.context;
 import static com.vik.test.MyClass.mapLevel;
+import static com.vik.test.MyClass.stats;
 
+import android.content.Intent;
+import android.util.Log;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.android.AndroidApplication;
+import com.vik.test.Difficulty;
 import com.vik.test.FireballManager;
 import com.vik.test.MyClass;
 
@@ -15,16 +23,49 @@ public class EnemyManager {
     public static FireballManager fbManager;
     public static List<Duplicator> Duplicators;
 
-    public EnemyManager(){
+
+    static final float DuplicatorPoints=10f;
+    static float bobPoints = 5f;
+    static float warriorPoints = 2f;
+
+    private int enemiesAmount;
+
+    public EnemyManager(Difficulty difficulty){
         enemyies = new ArrayList<Enemy>();
         fbManager = new FireballManager();
         Duplicators = new ArrayList<Duplicator>();
-        GenerateEnemys(2,4,1);
+        GenerateByDifficulty(difficulty );
     }
+
+    public void GenerateByDifficulty(Difficulty difficulty){
+        int warriors=0,bobs=0,duplicators=0;
+        switch (difficulty){
+            case Easy:
+                warriors = 4+ new Random().nextInt(5);
+                bobs = new Random().nextInt(5);
+                break;
+            case Medium:
+                warriors = 10+ new Random().nextInt(5);
+                bobs = 5+new Random().nextInt(5);
+                duplicators = 0+new Random().nextInt(2);
+                break;
+            case Hard:
+                warriors = 10+ new Random().nextInt(7);
+                bobs = 5+new Random().nextInt(5);
+                duplicators = 2+new Random().nextInt(4);
+            case Testing:
+                break;
+        }
+        GenerateEnemys(warriors,bobs,duplicators);
+
+    }
+
+
 
     public void GenerateEnemys(int warriors,int bobs,int duplicators){
         int maxEnemies = warriors+bobs+duplicators;
-
+        enemiesAmount = maxEnemies;
+        Log.d("AmountS","We have: "+enemiesAmount);
         Random rand = new Random();
 
         while(maxEnemies!=0){
@@ -68,8 +109,7 @@ public class EnemyManager {
 
 
 
-
-
+    boolean isFinished = false;
     public void Update(){
         fbManager.Update();
             for (Enemy enemy : enemyies) {
@@ -78,16 +118,35 @@ public class EnemyManager {
             for (Duplicator enemy : Duplicators){
                 enemy.Update();
             }
+            Log.d("AmountD","Left: "+enemyies.size()+" "+Duplicators.size());
+            if (enemyies.isEmpty() && Duplicators.isEmpty() && !isFinished){
+                Log.d("Winned","All enemies cleared");
+                Intent nt = new Intent("Stage Cleared");
+                context.sendBroadcast(nt);
+                isFinished = true;
+
+            }
+
     }
 
     public static void AddEnemy(Enemy enemy){
         enemyies.add(enemy);
     }
+
     public static void RemoveEnemy(Enemy enemy){
+
+        stats.incrementEnemiesKilled();
         if(enemy instanceof Duplicator){
+            stats.addPlayerScore(DuplicatorPoints);
             Duplicators.remove(enemy);
         }
         else{
+            if(enemy instanceof Bob){
+                stats.addPlayerScore(bobPoints);
+            }
+            else{
+                stats.addPlayerScore(warriorPoints);
+            }
             enemyies.remove(enemy);
         }
             MyClass.instances.remove(enemy.getModelInstance());

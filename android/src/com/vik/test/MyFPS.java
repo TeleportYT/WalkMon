@@ -23,13 +23,9 @@ public class MyFPS extends FirstPersonCameraController {
 
     @Override
     public boolean touchDragged (int screenX, int screenY, int pointer) {
-        Log.d("Touch","Y: "+screenY+" x: "+screenX);
-        if(screenX < Gdx.graphics.getWidth()/2){
-            return true;
-        }
-
-        float deltaX = -Gdx.input.getDeltaX() * degreesPerPixel/2;
-        float deltaY = -Gdx.input.getDeltaY() * degreesPerPixel/2;
+        Log.d("Touch","Y: "+screenY+" x: "+Gdx.input.getX(1)+" pointer: "+pointer);
+        float deltaX = -Gdx.input.getDeltaX(pointer) * degreesPerPixel/2;
+        float deltaY = -Gdx.input.getDeltaY(pointer) * degreesPerPixel/2;
         camera.direction.rotate(camera.up, deltaX);
         tmp.set(camera.direction).crs(camera.up).nor();
         camera.direction.rotate(tmp, deltaY);

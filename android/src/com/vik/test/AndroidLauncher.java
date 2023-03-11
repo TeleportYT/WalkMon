@@ -48,11 +48,11 @@ public class AndroidLauncher extends AndroidApplication {
 	private static final int RC_SIGN_IN = 9001;
 	private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-	private TextView username,gameName,loadingTxt;
+	private TextView username,gameName;
 	private ImageView pfp;
 	public ArrayList<View> views;
 	private Button play,settings,about,exit;
-	private LottieAnimationView loadingAnim;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +75,9 @@ public class AndroidLauncher extends AndroidApplication {
 		View v = initializeForView(new BgMoving(), config);
 		l.addView(v);
 		views.add(v);
+
+
+
 		LinearLayout lt = (LinearLayout)findViewById(R.id.lt);
 
 		username = findViewById(R.id.username);
@@ -87,8 +90,7 @@ public class AndroidLauncher extends AndroidApplication {
 		gameName = findViewById(R.id.textView2);
 		views.add(gameName);
 
-		loadingAnim = findViewById(R.id.animationView);
-		loadingTxt = findViewById(R.id.textView);
+
 
 		settings = findViewById(R.id.button);
 		about = findViewById(R.id.button2);
@@ -99,32 +101,9 @@ public class AndroidLauncher extends AndroidApplication {
 
 
 	public void OnClick(View v) {
-		ConstraintLayout l = (ConstraintLayout) findViewById(R.id.ct);
-		for (int i = 0; i< views.size();i++){
-			l.removeView(views.get(i));
-		}
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useAccelerometer = false;
-		config.useCompass = false;
-		loadingTxt.setVisibility(View.VISIBLE);
-		loadingAnim.setVisibility(View.VISIBLE);
-		GameManager game = new GameManager(getContext());
-		l.addView(initializeForView(game,config));
-
-		Handler mainHandler = new Handler(this.getMainLooper());
-
-		Runnable myRunnable = new Runnable() {
-			@Override
-			public void run() {
-				while(game.isLoaded()){
-					Log.d("Loading","Still Loading");
-				}
-				loadingTxt.setVisibility(View.INVISIBLE);
-				loadingAnim.setVisibility(View.INVISIBLE);
-			}
-		};
-		mainHandler.post(myRunnable);
-
+		Intent nt = new Intent(getApplicationContext(),GameLayout.class);
+		finish();
+		startActivity(nt);
 	}
 
 
