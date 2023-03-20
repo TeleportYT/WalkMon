@@ -2,6 +2,7 @@ package com.vik.test;
 
 import static android.content.ContentValues.TAG;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -97,13 +99,59 @@ public class AndroidLauncher extends AndroidApplication {
 		exit = findViewById(R.id.button3);
 
 
+		about.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Intent nt = new Intent(getApplicationContext(),AboutMe.class);
+				finish();
+				startActivity(nt);
+			}
+		});
+
+
+
+
+		exit.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				ShowExit();
+			}
+		});
+
+
 	}
 
+	@Override
+	public void onBackPressed() {
+		ShowExit();
+	}
 
 	public void OnClick(View v) {
 		Intent nt = new Intent(getApplicationContext(),GameLayout.class);
 		finish();
 		startActivity(nt);
+	}
+
+
+	public void ShowExit(){
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.app_name);
+		builder.setIcon(R.drawable.ic_baseline_exit_to_app_24);
+		builder.setMessage("Do you want to exit?")
+				.setCancelable(false)
+				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						finish();
+					}
+				})
+				.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+
 	}
 
 
@@ -115,11 +163,11 @@ public class AndroidLauncher extends AndroidApplication {
 				.build();
 
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-		/*
+
 		mGoogleSignInClient.signOut();
 		Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 		startActivityForResult(signInIntent, RC_SIGN_IN);
-		*/
+
 		super.onStart();
 	}
 

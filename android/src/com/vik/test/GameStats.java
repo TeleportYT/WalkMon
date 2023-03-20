@@ -6,6 +6,15 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class GameStats {
     private float playerHealth;
+
+    public void setPlayerScore(float playerScore) {
+        this.playerScore = playerScore;
+    }
+
+    public void setEnemiesKilled(int enemiesKilled) {
+        this.enemiesKilled = enemiesKilled;
+    }
+
     private float playerScore;
     private int enemiesKilled;
     private String time;

@@ -102,7 +102,7 @@ public class MyClass implements Screen {
 					instances.add(walls.get(i).getMi());
 				}
 				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-				enemies = new EnemyManager(Difficulty.Easy);
+				enemies = new EnemyManager(Difficulty.Hard);
 
 
 		GameUI = new GameUI();
@@ -210,7 +210,7 @@ public class MyClass implements Screen {
 				Log.d("Time","GameTime: "+gameTime+" MINs "+minutes+" "+seconds);
 				stats.setTime(String.format("%.0fm%.0fs", minutes, seconds));
 				stats.setPlayerHealth(0);
-				nt.putExtra("StatsId",stats.FinishGame(GameState.Lose,((AndroidApplication) Gdx.app).getContext()));
+				nt.putExtra("StatsId",""+stats.FinishGame(GameState.Lose,((AndroidApplication) Gdx.app).getContext()));
 				((AndroidApplication) Gdx.app).finish();
 				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
@@ -226,7 +226,7 @@ public class MyClass implements Screen {
 				Log.d("Time","GameTime: "+gameTime+" MINs "+minutes+" "+seconds);
 				stats.setTime(String.format("%.0fm%.0fs", minutes, seconds));
 				stats.setPlayerHealth(pc.hp);
-				nt.putExtra("StatsId",stats.FinishGame(GameState.Win,((AndroidApplication) Gdx.app).getContext()));
+				nt.putExtra("StatsId",""+stats.FinishGame(GameState.Win,((AndroidApplication) Gdx.app).getContext()));
 				((AndroidApplication) Gdx.app).finish();
 				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
