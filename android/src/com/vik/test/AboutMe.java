@@ -2,6 +2,7 @@ package com.vik.test;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,8 +13,9 @@ public class AboutMe extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_me);
 
-        ((TextView)findViewById(R.id.textView4)).setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            ((TextView)findViewById(R.id.textView4)).setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        }
 
 
         ((Button)findViewById(R.id.button8)).setOnClickListener(new View.OnClickListener() {

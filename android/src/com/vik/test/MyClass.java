@@ -102,7 +102,7 @@ public class MyClass implements Screen {
 					instances.add(walls.get(i).getMi());
 				}
 				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-				enemies = new EnemyManager(Difficulty.Hard);
+				enemies = new EnemyManager(Difficulty.Medium);
 
 
 		GameUI = new GameUI();
@@ -125,39 +125,43 @@ public class MyClass implements Screen {
 		isRunning = true;
 	}
 
+	private boolean isPaused = false;
+
+
 	@Override
 	public void render (float delta) {
-		Log.d("Delta","F: "+Gdx.graphics.getDeltaTime()+" G: "+delta);
-		gameTime+=Gdx.graphics.getDeltaTime();
-		Log.d("TimeD","F: "+gameTime);
-		camController.update();
-		cam.position.y = 0.5f;
-		world.Update(Gdx.graphics.getDeltaTime());
-		pc.update();
+		if (!isPaused) {
+			Log.d("Delta", "F: " + Gdx.graphics.getDeltaTime() + " G: " + delta);
+			gameTime += Gdx.graphics.getDeltaTime();
+			Log.d("TimeD", "F: " + gameTime);
+			camController.update();
+			cam.position.y = 0.5f;
+			world.Update(Gdx.graphics.getDeltaTime());
+			pc.update();
 
 
-		Gdx.gl20.glClearColor(0, 0f, 0, 0);
-		Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+			Gdx.gl20.glClearColor(0, 0f, 0, 0);
+			Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+			Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		cam.update();
-		enemies.Update();
-		GameUI.Update();
+			cam.update();
+			enemies.Update();
+		}
+			GameUI.Update();
 
+			scene.Update(cam);
 
-
-		scene.Update(cam);
-
-		modelBatch.begin(cam);
-		modelBatch.render(instances, world.getEnvironment());
-		modelBatch.end();
-
+			modelBatch.begin(cam);
+			modelBatch.render(instances, world.getEnvironment());
+			modelBatch.end();
 
 
 
 
-		GameUI.st.act(Gdx.graphics.getDeltaTime());
-		GameUI.st.draw();
+
+			GameUI.st.act(Gdx.graphics.getDeltaTime());
+			GameUI.st.draw();
+
 
 	}
 
@@ -215,6 +219,7 @@ public class MyClass implements Screen {
 				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
 			else if(intent.getAction().equals("Pause Game")){
+				isPaused = intent.getBooleanExtra("isPaused",isPaused);
 			}
 			else if(intent.getAction().equals("Player Healed")){
 

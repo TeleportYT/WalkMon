@@ -65,7 +65,7 @@ public class PlayerController
             attackTimer = 0;
         }
         else if(!attack){
-            attackTimer += (0.015/Gdx.graphics.getDeltaTime());
+            attackTimer += (0.015/Gdx.graphics.getDeltaTime() * 10);
             Log.d("Shot","Timer: "+ attackTimer+" can attack: "+attack);
         }
 

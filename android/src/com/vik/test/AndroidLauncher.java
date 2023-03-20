@@ -163,8 +163,6 @@ public class AndroidLauncher extends AndroidApplication {
 				.build();
 
 		mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-		mGoogleSignInClient.signOut();
 		Intent signInIntent = mGoogleSignInClient.getSignInIntent();
 		startActivityForResult(signInIntent, RC_SIGN_IN);
 
@@ -238,7 +236,6 @@ public class AndroidLauncher extends AndroidApplication {
 				}
 				else{
 					player = snapshot.getValue(User.class);
-					Toast.makeText(getApplicationContext(),player.getUsername(),Toast.LENGTH_SHORT).show();
 				}
 				username.setText(player.getUsername());
 				Uri uri = Uri.parse(player.getPfpUri());
@@ -257,8 +254,6 @@ public class AndroidLauncher extends AndroidApplication {
 
 	@Override
 	protected void onDestroy() {
-		mAuth.signOut();
-		mGoogleSignInClient.signOut();
 		super.onDestroy();
 	}
 }

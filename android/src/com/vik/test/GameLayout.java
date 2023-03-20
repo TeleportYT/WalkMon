@@ -1,12 +1,19 @@
 package com.vik.test;
 
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -31,7 +38,10 @@ public class GameLayout extends AndroidApplication {
         loadingTxt = findViewById(R.id.textView);
         ConstraintLayout l = (ConstraintLayout) findViewById(R.id.rt);
         LoadGame(l);
+
+
     }
+
 
     public void LoadGame(ConstraintLayout l){
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
@@ -40,7 +50,11 @@ public class GameLayout extends AndroidApplication {
         loadingTxt.setVisibility(View.VISIBLE);
         loadingAnim.setVisibility(View.VISIBLE);
         GameManager game = new GameManager(getContext());
-        l.addView(initializeForView(game,config));
+        View v = initializeForView(game,config);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            v.setElevation(-100);
+        }
+        l.addView(v);
 
         Handler mainHandler = new Handler(this.getMainLooper());
 
@@ -51,6 +65,7 @@ public class GameLayout extends AndroidApplication {
                 while(!game.isLoaded()){
                     Log.d("Loading","Still Loading");
                     loadingTxt.setText("Loading"+( new String(new char[i]). replace("\0", "*")));
+                    loadingTxt.setElevation(1);
                     i++;
                 }
                 loadingTxt.setVisibility(View.INVISIBLE);
@@ -58,5 +73,6 @@ public class GameLayout extends AndroidApplication {
             }
         };
         mainHandler.post(myRunnable);
+
     }
 }

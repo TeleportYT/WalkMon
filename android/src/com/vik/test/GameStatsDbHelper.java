@@ -111,5 +111,46 @@ public class GameStatsDbHelper extends SQLiteOpenHelper {
         return gameStatsList;
     }
 
+    public GameStats getGameStatsWithBestScore() {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] projection = {
+                GameStatsContract.GameStatsEntry.COLUMN_NAME_PLAYER_HEALTH,
+                GameStatsContract.GameStatsEntry.COLUMN_NAME_PLAYER_SCORE,
+                GameStatsContract.GameStatsEntry.COLUMN_NAME_ENEMIES_KILLED,
+                GameStatsContract.GameStatsEntry.COLUMN_NAME_TIME,
+                GameStatsContract.GameStatsEntry.COLUMN_NAME_STATE
+        };
+
+        String selection = GameStatsContract.GameStatsEntry.COLUMN_NAME_PLAYER_SCORE + " = (SELECT MAX(" + GameStatsContract.GameStatsEntry.COLUMN_NAME_PLAYER_SCORE + ") FROM " + GameStatsContract.GameStatsEntry.TABLE_NAME + ")";
+
+        Cursor cursor = db.query(
+                GameStatsContract.GameStatsEntry.TABLE_NAME,
+                projection,
+                selection,
+                null,
+                null,
+                null,
+                null
+        );
+
+        GameStats gameStats = null;
+
+        if (cursor.moveToFirst()) {
+            gameStats = new GameStats();
+            gameStats.setPlayerHealth(cursor.getFloat(cursor.getColumnIndexOrThrow(GameStatsContract.GameStatsEntry.COLUMN_NAME_PLAYER_HEALTH)));
+            gameStats.setPlayerScore(cursor.getFloat(cursor.getColumnIndexOrThrow(GameStatsContract.GameStatsEntry.COLUMN_NAME_PLAYER_SCORE)));
+            gameStats.setEnemiesKilled(cursor.getInt(cursor.getColumnIndexOrThrow(GameStatsContract.GameStatsEntry.COLUMN_NAME_ENEMIES_KILLED)));
+            gameStats.setTime(cursor.getString(cursor.getColumnIndexOrThrow(GameStatsContract.GameStatsEntry.COLUMN_NAME_TIME)));
+            gameStats.setState(GameState.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(GameStatsContract.GameStatsEntry.COLUMN_NAME_STATE))));
+        }
+
+        cursor.close();
+
+        return gameStats;
+    }
+
+
+
 
 }
