@@ -12,7 +12,6 @@
         android:layout_height="0dp"
         android:fontFamily="@font/gungeon"
         android:gravity="center|fill_vertical"
-        app:layout_constraintHeight_percent="0.2"
         android:text="Your Stats"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="60sp"
@@ -22,10 +21,57 @@
         app:autoSizeMinTextSize="48sp"
         app:autoSizeStepGranularity="2sp"
         app:autoSizeTextType="none"
-        app:layout_constraintBottom_toTopOf="@+id/lt"
+        app:layout_constraintBottom_toTopOf="@+id/toggle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+
+    <RadioGroup
+        android:id="@+id/toggle"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:checkedButton="@+id/global"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22000003"
+        android:background="@drawable/pink_out_line"
+        app:layout_constraintWidth_percent="0.5">
+
+        <RadioButton
+            android:id="@+id/your"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:button="@null"
+            android:background="@drawable/toggle_widget_background"
+            android:gravity="center"
+            android:text="Your Stats"
+            android:textColor="#FFFFFF" />
+
+        <RadioButton
+            android:id="@+id/global"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/toggle_widget_background"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Global Stats"
+            android:textColor="#FFFFFF" />
+    </RadioGroup>
+
 
     <ListView
         android:id="@+id/lt"
@@ -34,7 +80,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/toggle"
         app:layout_constraintWidth_percent="0.5">
 
     </ListView>

@@ -1,5 +1,7 @@
 package com.vik.test;
 
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -81,7 +83,7 @@ public class Level {
 
         for(int i = 0; i<this.Size;i++){
             wallsList.add(new Wall(-1,i,0.5f));
-            wallsList.add(new Wall(Size,i,0.5f));
+           wallsList.add(new Wall(Size,i,0.5f));
             wallsList.add(new Wall(i,-1,0.5f));
             wallsList.add(new Wall(i,Size,0.5f));
             for(int j = 0; j<this.Size;j++){
@@ -119,15 +121,18 @@ public class Level {
 
         Vector3 tmp = new Vector3();
         tmp.set(pos1);
+        tmp.y = 0.5f;
 
         Vector3 dir = new Vector3();
         dir.set(tmp).sub(pos2);
         dir.y = 0;
         dir.nor();
 
+        Log.d("Sight", "pos1: "+pos1+" Pos2:"+pos2);
+        Log.d("sight2","tmp: "+tmp+" dir:"+dir);
         while(tmp.dst2(pos2) > (0.25f) * (0.25f)){
             tmp.mulAdd(dir, -0.25f);
-
+            Log.d("Sight3", "pos1: "+pos1+" Pos2:"+pos2+" dir: "+dir);
             if(getCollision((int)tmp.x, (int)tmp.z)!=1)
                 return false;
 

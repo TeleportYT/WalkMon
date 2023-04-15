@@ -12,6 +12,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,6 +26,9 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
 
+
+import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
+import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +53,9 @@ public class MyClass implements Screen {
 	public static AssetManager manager;
 	private boolean isRunning = false;
 	private double gameTime=0;
-
+	public static SoundEffects sd;
+	public static ModelsManager mg;
+	InputMultiplexer multiplexer;
 	public boolean isLoaded(){
 		return manager.isFinished();
 	}
@@ -63,6 +70,16 @@ public class MyClass implements Screen {
 		manager.load("floor.png",Texture.class);
 		manager.load("uiskin.json", Skin.class);
 		manager.load("fire_button.json",Skin.class);
+		manager.load("sound effects/running.mp3", Music.class);
+		manager.load("sound effects/inGameMusic.mp3", Music.class);
+		manager.load("sound effects/flyingEnemy.mp3", Sound.class);
+		manager.load("sound effects/punch.mp3", Sound.class);
+		manager.load("sound effects/shoot.mp3", Sound.class);
+
+		manager.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader());
+		manager.load("spawner.glb",SceneAsset.class);
+		manager.load("enemybug.glb", SceneAsset.class);
+		manager.load("drone.glb", SceneAsset.class);
 
 	}
 
@@ -73,9 +90,9 @@ public class MyClass implements Screen {
 		intentFilter.addAction("Player Dead");
 		intentFilter.addAction("Pause Game");
 		intentFilter.addAction("Player Healed");
+		intentFilter.addAction("Main Menu");
 		intentFilter.addAction("Stage Cleared");
         context.registerReceiver(receiver,intentFilter);
-
 
 
 
@@ -89,7 +106,7 @@ public class MyClass implements Screen {
 		cam.far = 30f;
 		cam.update();
 		scene = new GameScene(cam);
-
+		mg = new ModelsManager(cam,manager);
 		// setup controller for camera
 		camController = new MyFPS(cam);
 		instances = new ArrayList<>();
@@ -102,14 +119,14 @@ public class MyClass implements Screen {
 					instances.add(walls.get(i).getMi());
 				}
 				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-				enemies = new EnemyManager(Difficulty.Medium);
+				enemies = new EnemyManager(Difficulty.Testing);
 
 
 		GameUI = new GameUI();
 
 
-		InputMultiplexer multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(GameUI.st);
+		multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(GameUI.getSt());
 		multiplexer.addProcessor(camController);
         Gdx.input.setInputProcessor(multiplexer);
 
@@ -123,6 +140,8 @@ public class MyClass implements Screen {
 		camController.setPl(pc);
 		stats = new GameStats();
 		isRunning = true;
+		sd = new SoundEffects(manager);
+
 	}
 
 	private boolean isPaused = false;
@@ -145,22 +164,24 @@ public class MyClass implements Screen {
 			Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 			cam.update();
+			scene.Update(cam);
 			enemies.Update();
 		}
-			GameUI.Update();
 
-			scene.Update(cam);
+
+
+
+
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+		mg.getSceneManager().update(Gdx.graphics.getDeltaTime());
+		mg.getSceneManager().render();
+
 
 			modelBatch.begin(cam);
 			modelBatch.render(instances, world.getEnvironment());
 			modelBatch.end();
 
-
-
-
-
-			GameUI.st.act(Gdx.graphics.getDeltaTime());
-			GameUI.st.draw();
+		GameUI.Update();
 
 
 	}
@@ -215,7 +236,9 @@ public class MyClass implements Screen {
 				stats.setTime(String.format("%.0fm%.0fs", minutes, seconds));
 				stats.setPlayerHealth(0);
 				nt.putExtra("StatsId",""+stats.FinishGame(GameState.Lose,((AndroidApplication) Gdx.app).getContext()));
+				((AndroidApplication) Gdx.app).getContext().unregisterReceiver(receiver);
 				((AndroidApplication) Gdx.app).finish();
+
 				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
 			else if(intent.getAction().equals("Pause Game")){
@@ -232,7 +255,17 @@ public class MyClass implements Screen {
 				stats.setTime(String.format("%.0fm%.0fs", minutes, seconds));
 				stats.setPlayerHealth(pc.hp);
 				nt.putExtra("StatsId",""+stats.FinishGame(GameState.Win,((AndroidApplication) Gdx.app).getContext()));
+				((AndroidApplication) Gdx.app).getContext().unregisterReceiver(receiver);
 				((AndroidApplication) Gdx.app).finish();
+
+				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
+			}
+			else if(intent.getAction().equals("Main Menu")){
+
+				Intent nt = new Intent(((AndroidApplication) Gdx.app).getContext(), AndroidLauncher.class);
+				((AndroidApplication) Gdx.app).getContext().unregisterReceiver(receiver);
+				((AndroidApplication) Gdx.app).finish();
+
 				((AndroidApplication) Gdx.app).getContext().startActivity(nt);
 			}
 		}

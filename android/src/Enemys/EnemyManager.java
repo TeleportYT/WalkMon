@@ -54,6 +54,7 @@ public class EnemyManager {
                 bobs = 5+new Random().nextInt(5);
                 duplicators = 2+new Random().nextInt(4);
             case Testing:
+
                 break;
         }
         GenerateEnemys(warriors,bobs,duplicators);
@@ -149,7 +150,6 @@ public class EnemyManager {
             }
             enemyies.remove(enemy);
         }
-            MyClass.instances.remove(enemy.getModelInstance());
     }
 
 

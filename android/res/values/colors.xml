@@ -1,5 +1,8 @@
 
 <resources>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="dark_pink">#F50057</color>
+    <color name="pink">#FF1744</color>
     <color name="seed">#564138</color>
     <color name="md_theme_light_primary">#99461B</color>
     <color name="md_theme_light_onPrimary">#FFFFFF</color>

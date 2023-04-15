@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 
+import Enemys.EnemyType;
+
 public class FireBall extends Projectiles{
 
     public FireBall(float damage, float speed, Vector3 position, Vector3 direction, Level lvl) {
@@ -30,7 +32,7 @@ public class FireBall extends Projectiles{
     public void Collision(){
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
             Gdx.app.debug("Enemy","i see you");
-            MyClass.pc.Damage(this.damage);
+            MyClass.pc.Damage(this.damage, EnemyType.bob);
             MyClass.instances.remove(this.model);
             FireballManager.fireballs.remove(this);
     }

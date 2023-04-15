@@ -2,11 +2,20 @@ package com.vik.test;
 
 import static android.content.ContentValues.TAG;
 
+import android.Manifest;
+import android.app.NotificationManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.badlogic.gdx.Gdx;
@@ -119,18 +129,49 @@ public class AndroidLauncher extends AndroidApplication {
 		});
 
 
+		setUpMusic();
+
+		NotificationManager n = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			if(!n.isNotificationPolicyAccessGranted()){
+				Intent intent = new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+				startActivityForResult(intent,69);
+			}
+		}
+
 	}
 
-	@Override
-	public void onBackPressed() {
-		ShowExit();
+	private void requestPermission() {
+		if (ActivityCompat.shouldShowRequestPermissionRationale(this,android.Manifest.permission.ACCESS_NOTIFICATION_POLICY)) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NOTIFICATION_POLICY}, 79);
+		} else {
+			ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_NOTIFICATION_POLICY},
+					79);
+		}
+		if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_NOTIFICATION_POLICY)) {
+		} else {
+			ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_NOTIFICATION_POLICY},
+					79);
+		}
 	}
+
+
 
 	public void OnClick(View v) {
 		Intent nt = new Intent(getApplicationContext(),GameLayout.class);
 		finish();
 		startActivity(nt);
 	}
+
+
+
+
+	//region exit
+	@Override
+	public void onBackPressed() {
+		ShowExit();
+	}
+
 
 
 	public void ShowExit(){
@@ -154,6 +195,9 @@ public class AndroidLauncher extends AndroidApplication {
 
 	}
 
+	//endregion
+
+	//region firebase
 
 	@Override
 	protected void onStart() {
@@ -248,12 +292,64 @@ public class AndroidLauncher extends AndroidApplication {
 			}
 		});
 
+		requestPermission();
+	}
 
+	//endregion
+
+
+	//region musicService
+	musicService musicS;
+	boolean isBound = false;
+
+
+	public void setUpMusic(){
+		Intent music = new Intent(this,musicService.class);
+		bindService(music,connection, Context.BIND_AUTO_CREATE);
+		startService(music);
+
+	}
+
+
+	private ServiceConnection connection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName className,
+									   IBinder service) {
+			// We've bound to LocalService, cast the IBinder and get LocalService instance.
+			musicService.LocalBinder binder = (musicService.LocalBinder) service;
+			musicS = binder.getService();
+			isBound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			isBound = false;
+		}
+	};
+
+	//endregion
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		if (isBound){
+			musicS.pauseMusic();
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if	(isBound){
+			musicS.ResumeMusic();
+		}
 	}
 
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		musicS.onDestroy();
 	}
 }

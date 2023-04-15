@@ -21,6 +21,8 @@ import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 
 import java.util.List;
 
+import Enemys.EnemyType;
+
 
 public class PlayerController
 {
@@ -77,7 +79,7 @@ public class PlayerController
 
 
     public void MovePlayer(float x,float y){
-
+        boolean isWalking = false;
         float dt = Gdx.graphics.getDeltaTime();
 
         moveVector.setZero();
@@ -87,21 +89,25 @@ public class PlayerController
             tmpVector.set(cam.direction);
             tmpVector.y = 0;
             moveVector.add(tmpVector.nor().scl(dt * moveSpeed));
+            isWalking = true;
         }
         if (y<0) {
             tmpVector.set(cam.direction);
             tmpVector.y = 0;
             moveVector.add(tmpVector.nor().scl(dt * -moveSpeed));
+            isWalking = true;
         }
         if (x<0){
             tmpVector.set(cam.direction).crs(cam.up);
             tmpVector.y = 0;
             moveVector.add(tmpVector.nor().scl(dt * -moveSpeed));
+            isWalking = true;
         }
         if (x>0){
             tmpVector.set(cam.direction).crs(cam.up);
             tmpVector.y = 0;
             moveVector.add(tmpVector.nor().scl(dt * moveSpeed));
+            isWalking = true;
         }
 
         float colX = moveVector.x==0 ? 0 : (moveVector.x>0 ? .25f : -0.25f);
@@ -122,6 +128,9 @@ public class PlayerController
         cam.position.set(position.x, position.y, position.z);
 
 
+
+
+        MyClass.sd.Walk(isWalking);
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
         Gdx.app.debug("Player Position",""+position.x+","+position.y+","+position.z);
     }
@@ -135,16 +144,18 @@ public class PlayerController
         blManager.AddBullet(new Bullet(10,10f,position,tmp));
         attack = false;
         attackTimer  = 0;
+        MyClass.sd.Shoot();
     }
 
 
-    public void Damage(float damage){
+    public void Damage(float damage, EnemyType Type){
 
         if(this.hp>0){
             this.hp -= damage;
         }
         Intent intent=new Intent("Player Damaged");
         intent.putExtra("Player Health", this.hp);
+        intent.putExtra("Type",""+Type);
         MyClass.context.sendBroadcast(intent);
         if(this.hp<=0){
           Die();

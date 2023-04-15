@@ -2,30 +2,25 @@ package Enemys;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
-import com.vik.test.MyClass;
-
-import net.mgsx.gltf.loaders.glb.GLBLoader;
-import net.mgsx.gltf.scene3d.scene.Scene;
-import net.mgsx.gltf.scene3d.scene.SceneAsset;
+import com.vik.test.PlayerController;
 
 import static com.vik.test.MyClass.*;
 import static com.vik.test.MyClass.pc;
-import static Enemys.EnemyManager.Duplicators;
+
+import android.util.Log;
+
+import net.mgsx.gltf.scene3d.scene.Scene;
 
 public abstract class Enemy {
 
     protected float HP=100f;
     protected float Damage = 10f;
-
+    protected EnemyType type;
+    private Scene enemyModel;
     public ModelInstance getModelInstance() {
         return modelInstance;
     }
@@ -46,17 +41,14 @@ public abstract class Enemy {
     protected float moveSpeed = 2f;
     protected Vector3 moveVector;
     protected Vector3 tmpVector;
-    public Enemy(float x, float z){
-        position = new Vector3(x+0.5f,0.5f,z+0.5f);
+    public Enemy(float x, float z, EnemyType Type){
+        position = new Vector3(x+0.5f,0,z+0.5f);
         moveVector = new Vector3();
         tmpVector = new Vector3();
-
-        modelInstance = new ModelInstance(new ModelBuilder()
-                .createBox(0.25f, 0.25f, 0.25f, new Material(ColorAttribute.createAmbient(Color.BLACK)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
-        );
-        modelInstance.transform.translate(x+0.5f,0.5f,z+0.5f);
-
-        instances.add(modelInstance);
+        enemyModel = mg.AddEnemy(Type,x,z);
+        modelInstance = enemyModel.modelInstance;
+        modelInstance.transform.setTranslation(x+0.5f,0,z+0.5f);
+        this.type = Type;
     }
 
     public void Update(){
@@ -67,32 +59,35 @@ public abstract class Enemy {
         modelInstance.transform.getTranslation(position1);
         direction = (position2).sub(position1).nor();
 
-        direction.set(-direction.x, -direction.y, -direction.z);
+        direction.set(-direction.x, 0, -direction.z);
 
         quaternion = new Quaternion();
         Matrix4 instanceRotation = modelInstance.transform.cpy().mul(modelInstance.transform);
 
         instanceRotation.setToLookAt(direction, new Vector3(0,-1,0));
         instanceRotation.rotate(0, 0, 1, 180);
+        if(this.type == EnemyType.warrior){
+            instanceRotation.rotate(0,1,0,-90);
+        }
         instanceRotation.getRotation(quaternion);
 
         modelInstance.transform.set(position1, quaternion);
-        ChangeUpdate(direction,quaternion);
     }
  
     public Boolean ifSeePlayer(Vector3 direction){
         Vector3 tmp = new Vector3();
         tmp.set(position).mulAdd(direction, -2f);
-        if(pc.position.dst2(position) < (16) * (16) && mapLevel.lineOfSightCheap(position, pc.position)){
+        if(mapLevel.lineOfSightCheap(position,pc.position)){
+            Log.d("dst ","tmp: "+tmp.toString());
+            Log.d("dst ","dst: "+pc.position.dst2(position)+" sight: "+mapLevel.lineOfSightCheap(position, PlayerController.position));
+        }
+        if(PlayerController.position.dst2(position) < (16) * (16) && mapLevel.lineOfSightCheap(position, PlayerController.position)){
            return true;
         }
         return false;
     }
 
 
-    public void ChangeUpdate(Vector3 direction,Quaternion quaternion){
-
-    }
 
     public void Attack(Vector3 direction){
 
@@ -113,6 +108,7 @@ public abstract class Enemy {
 
     public void Die(){
         EnemyManager.RemoveEnemy(this);
+        mg.getSceneManager().removeScene(enemyModel);
     }
 
 

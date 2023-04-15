@@ -13,15 +13,41 @@ public class Bob extends Enemy{
     private float shootTimer = 0;
 
     public Bob(float x, float z) {
-        super(x, z);
+        super(x, z, EnemyType.bob);
+        position = new Vector3(x+0.5f,0.5f,z+0.5f);
+        modelInstance.transform.setTranslation(x+0.5f,0.5f,z+0.5f);
     }
 
     public void Update(){
 
         super.Update();
 
-        float dt = Gdx.graphics.getDeltaTime();
 
+        float dt = Gdx.graphics.getDeltaTime();
+        position = new Vector3();
+        this.modelInstance.transform.getTranslation(position);
+        position.mulAdd(direction, -Gdx.graphics.getDeltaTime());
+        position.y = 0.5f;
+        if(ifSeePlayer(direction) && position.dst2(PlayerController.position)>2f * 1f) {
+            modelInstance.transform.set(position,quaternion);
+        }
+
+        if(shootTimer <= 0){
+            if(ifSeePlayer(direction)){
+                if(MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
+                    Attack(direction);
+                }
+            }
+            shootTimer = 2.5f;
+        }
+        else{
+            shootTimer-= dt;
+        }
+
+
+        modelInstance.transform.scale(0.2f,0.2f,0.2f);
+
+        /*
         if(shootTimer <= 0){
             if(ifSeePlayer(direction)){
                 if(PlayerController.position.dst2(position) < (16) * (16) && MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
@@ -33,6 +59,8 @@ public class Bob extends Enemy{
         else{
             shootTimer-= dt;
         }
+
+         */
     }
 
 
