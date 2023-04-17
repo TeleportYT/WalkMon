@@ -13,13 +13,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
-public class StatsAdpter extends ArrayAdapter<GameStats> {
+public class LeaderboardAdapter extends ArrayAdapter<GameStats> {
 
-    public StatsAdpter(Context context, List<GameStats> resource) {
+    List<String> usernames;
+    public LeaderboardAdapter(Context context, List<GameStats> resource,List<String> usernames) {
         super(context, 0,resource);
+        this.usernames = usernames;
     }
 
     @NonNull
@@ -35,7 +36,7 @@ public class StatsAdpter extends ArrayAdapter<GameStats> {
 
         // look up the views and populate them with the data
         TextView textViewName1 = convertView.findViewById(R.id.state);
-        textViewName1.setText(stat.getState() == GameState.Win ? "Winned" : "Lost");
+        textViewName1.setText(usernames.get(position));
         textViewName1.setBackgroundColor(stat.getState() == GameState.Win ? Color.GREEN : Color.RED);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             textViewName1.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
@@ -63,11 +64,17 @@ public class StatsAdpter extends ArrayAdapter<GameStats> {
 
 
         Resources res = this.getContext().getResources();
+        textViewName1.setTextColor(res.getColor(android.R.color.primary_text_dark_nodisable));
+        textViewName3.setTextColor(res.getColor(android.R.color.primary_text_dark_nodisable));
+        textViewName4.setTextColor(res.getColor(android.R.color.primary_text_dark_nodisable));
+        textViewName5.setTextColor(res.getColor(android.R.color.primary_text_dark_nodisable));
+        textViewName6.setTextColor(res.getColor(android.R.color.primary_text_dark_nodisable));
         for (int i =0 ; i<4;i++){
             int id = res.getIdentifier("txt"+(i+1), "id", getContext().getPackageName());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 ((TextView)convertView.findViewById(id)).setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             }
+            ((TextView)convertView.findViewById(id)).setTextColor(res.getColor(android.R.color.primary_text_dark_nodisable));
             ((TextView)convertView.findViewById(id)).setLines(1);
         }
 
