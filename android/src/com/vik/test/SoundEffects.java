@@ -21,11 +21,8 @@ import Enemys.EnemyType;
 public class SoundEffects {
 
     private Music walking;
-    private Music enemy;
-    private Music Damaged;
     private Music inGame;
     private AssetManager manager;
-    private long walkingId;
     SharedPreferences prefs;
     SharedPreferences.Editor myEdit;
     public SoundEffects(AssetManager manager) {

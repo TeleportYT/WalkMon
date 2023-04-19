@@ -7,12 +7,9 @@ import android.content.IntentFilter;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -20,22 +17,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import org.w3c.dom.Text;
 
 public class GameUI {
 
@@ -60,8 +48,8 @@ public class GameUI {
         ((AndroidApplication) Gdx.app).getContext().registerReceiver(receiver,intentFilter);
 
        this.st = new Stage(new ScreenViewport());
-       this.skin = MyClass.manager.get("uiskin.json",Skin.class);
-       Skin mySkin = MyClass.manager.get("fire_button.json",Skin.class);
+       this.skin = Game.manager.get("uiskin.json",Skin.class);
+       Skin mySkin = Game.manager.get("fire_button.json",Skin.class);
 
        this.th = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
        th.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
@@ -74,7 +62,7 @@ public class GameUI {
         shotBt.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                MyClass.pc.Fire();
+                Game.pc.Fire();
                 return  true;
             }
         });
@@ -115,7 +103,7 @@ public class GameUI {
                 isMenu = !isMenu;
                 Intent intent=new Intent("Pause Game");
                 intent.putExtra("isPaused", isMenu);
-                MyClass.context.sendBroadcast(intent);
+                Game.context.sendBroadcast(intent);
             };
         });
 
@@ -123,12 +111,13 @@ public class GameUI {
 
          menu = new Menu("Settings",skin,st);
          menu.setVisible(false);
+        st.addActor(menu.getTable());
         st.addActor(BloodEffect);
         st.addActor(crossair);
         st.addActor(th);
         st.addActor(shotBt);
         st.addActor(button);
-        st.addActor(menu.getTable());
+
 
         st.draw();
     }
@@ -137,7 +126,7 @@ public class GameUI {
 
 
     public void Update(){
-        BloodEffect.setColor(255,255,255,1-(MyClass.pc.hp/100));
+        BloodEffect.setColor(255,255,255,1-(Game.pc.hp/100));
         st.act(Gdx.graphics.getDeltaTime());
         st.draw();
     }

@@ -1,6 +1,5 @@
 package com.vik.test;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
@@ -30,7 +29,7 @@ public class Floor {
        this.degrees = degrees;
        this.mi.transform.setToTranslation(x,y,z);
        this.mi.transform.rotate(1,0,1,degrees);
-       MyClass.instances.add(mi);
+       Game.instances.add(mi);
 
 
 
@@ -39,7 +38,7 @@ public class Floor {
    public Model BuildFloor(){
        ModelBuilder modelBuilder = new ModelBuilder();
        modelBuilder.begin();
-       Texture brickTexture = MyClass.manager.get("floor.png",Texture.class);
+       Texture brickTexture = Game.manager.get("floor.png",Texture.class);
        Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));
        MeshPartBuilder builder = modelBuilder.part("floor", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, brickMaterial);
        builder.rect(0, 0, 1,

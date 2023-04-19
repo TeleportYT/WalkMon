@@ -3,7 +3,6 @@ package com.vik.test;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.opengl.Visibility;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -41,15 +40,15 @@ public class Menu {
         return table;
     }
 
-    public void setTable(Table table) {
-        this.table = table;
-    }
 
     private Table table;
 
     public void setVisible(boolean visible) {
         table.setVisible(visible);
+
         bg.setVisible(visible);
+        bg.toFront();
+        table.toFront();
     }
     Image bg;
 
@@ -59,7 +58,7 @@ public class Menu {
         table.setBounds(stage.getWidth()/2-stage.getWidth()/3f,stage.getHeight()/2-stage.getHeight()/3f,stage.getWidth()/1.5f,stage.getHeight()/1.5f);
         table.setVisible(true);
         table.setDebug(true);
-        menuName = new Label(name,new Label.LabelStyle(generatefont(), Color.WHITE));
+        menuName = new Label(name,new Label.LabelStyle(generatefont(), Color.BLACK));
         menuName.setAlignment(Align.center);
         table.add(menuName)
                 .expand()
@@ -84,13 +83,13 @@ public class Menu {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(((AndroidApplication) Gdx.app).getContext());
         ArrayList<Actor> actors = new ArrayList<Actor>();
 
-        Label msVolume = new Label("Music",new Label.LabelStyle(generatefont(), Color.WHITE));
+        Label msVolume = new Label("Music",new Label.LabelStyle(generatefont(), Color.BLACK));
         Slider msSlider = new Slider(0,100,1,false,skin);
         msSlider.setValue(prefs.getFloat("Music",100));
         msSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                MyClass.sd.VolumeMusic(msSlider.getValue());
+                Game.sd.VolumeMusic(msSlider.getValue());
             }
         });
         sliderContainer = new Container<Slider>(msSlider);
@@ -102,13 +101,13 @@ public class Menu {
         sliderContainer.setOrigin(msSlider.getWidth()/2,msSlider.getHeight()/2);
         sliderContainer.setSize(msSlider.getWidth()/(((table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
 
-        Label efVolume = new Label("Effects Volume",new Label.LabelStyle(generatefont(), Color.WHITE));
+        Label efVolume = new Label("Effects Volume",new Label.LabelStyle(generatefont(), Color.BLACK));
         Slider efSlider = new Slider(0,100,1,false,skin);
         efSlider.setValue(prefs.getFloat("SoundEffect",100));
         efSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               MyClass.sd.LowerSoundEffects(efSlider.getValue());
+               Game.sd.LowerSoundEffects(efSlider.getValue());
             }
         });
 
@@ -122,7 +121,7 @@ public class Menu {
         efContainer.setSize(msSlider.getWidth()/(((table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
 
 
-        Label notifyLb = new Label("Notifications",new Label.LabelStyle(generatefont(), Color.WHITE));
+        Label notifyLb = new Label("Notifications",new Label.LabelStyle(generatefont(), Color.BLACK));
 
         TextButton notifyChecker = new TextButton(null,skin.get("toggle",TextButton.TextButtonStyle.class));
         notifyChecker.setSize(msSlider.getWidth()/(((table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
@@ -174,7 +173,7 @@ public class Menu {
             };
         });
 
-        mainMenu.setSize(100,100);
+        mainMenu.setSize(table.getWidth()/2,100);
 
 
 
@@ -203,7 +202,7 @@ public class Menu {
                 table.add(actors.get((i*2)+1)).width(sliderContainer.getWidth()).pad(0,0,0,50);
             }
         }
-        table.row().pad(10,500,0,500);
+        table.row().pad(10,table.getWidth()/8,0,table.getWidth()/8);
         table.add(actors.get(6)).expand().fill().colspan(2);
     }
 

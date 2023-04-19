@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 import com.vik.test.FireBall;
-import com.vik.test.MyClass;
+import com.vik.test.Game;
 import com.vik.test.PlayerController;
 
 public class Bob extends Enemy{
@@ -34,7 +34,7 @@ public class Bob extends Enemy{
 
         if(shootTimer <= 0){
             if(ifSeePlayer(direction)){
-                if(MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
+                if(Game.mapLevel.lineOfSightCheap(position, PlayerController.position)){
                     Attack(direction);
                 }
             }
@@ -46,26 +46,11 @@ public class Bob extends Enemy{
 
 
         modelInstance.transform.scale(0.2f,0.2f,0.2f);
-
-        /*
-        if(shootTimer <= 0){
-            if(ifSeePlayer(direction)){
-                if(PlayerController.position.dst2(position) < (16) * (16) && MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
-                    Attack(direction);
-                }
-            }
-            shootTimer = 5;
-        }
-        else{
-            shootTimer-= dt;
-        }
-
-         */
     }
 
 
     public void Attack(Vector3 direction){
-        EnemyManager.fbManager.AddFireBall(new FireBall(10,2,position,direction,MyClass.mapLevel));
+        EnemyManager.fbManager.AddFireBall(new FireBall(10,2,position,direction, Game.mapLevel));
     }
 
     @NonNull

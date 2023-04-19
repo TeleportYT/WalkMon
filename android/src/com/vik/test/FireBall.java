@@ -17,7 +17,7 @@ public class FireBall extends Projectiles{
     public FireBall(float damage, float speed, Vector3 position, Vector3 direction, Level lvl) {
         super(damage, speed, position, direction, lvl,new ModelInstance(new ModelBuilder()
                 //.createBox(0.25f, 0.25f, 0.25f, new Material(ColorAttribute.createAmbient(Color.BLACK)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
-                .createCapsule(0.25f, .5f, 10, new Material(ColorAttribute.createAmbient(Color.YELLOW)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
+                .createCapsule(0.25f, .5f, 10, new Material(ColorAttribute.createDiffuse(Color.RED)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
         ));
     }
 
@@ -32,8 +32,8 @@ public class FireBall extends Projectiles{
     public void Collision(){
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
             Gdx.app.debug("Enemy","i see you");
-            MyClass.pc.Damage(this.damage, EnemyType.bob);
-            MyClass.instances.remove(this.model);
+            Game.pc.Damage(this.damage, EnemyType.bob);
+            Game.instances.remove(this.model);
             FireballManager.fireballs.remove(this);
     }
 }

@@ -1,13 +1,11 @@
 package Enemys;
 
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
-import com.vik.test.MyClass;
+import com.vik.test.Game;
 import com.vik.test.PlayerController;
 
 public class Warrior extends Enemy{
@@ -34,7 +32,7 @@ public class Warrior extends Enemy{
         else if(position.dst2(PlayerController.position)<0.5f * 0.5f){
             if(attackTimer <= 0){
                 if(ifSeePlayer(direction)){
-                    if(MyClass.mapLevel.lineOfSightCheap(position, PlayerController.position)){
+                    if(Game.mapLevel.lineOfSightCheap(position, PlayerController.position)){
                         Attack(direction);
                     }
                 }
@@ -50,7 +48,7 @@ public class Warrior extends Enemy{
 
     @Override
     public void Attack(Vector3 direction){
-        MyClass.pc.Damage(2f,EnemyType.warrior);
+        Game.pc.Damage(2f,EnemyType.warrior);
     }
 
     @NonNull

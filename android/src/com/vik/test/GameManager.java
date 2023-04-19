@@ -1,19 +1,17 @@
 package com.vik.test;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 
-public class GameManager extends Game {
+public class GameManager extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
        new Thread(new Runnable() {
            @Override
            public void run() {
-               MyClass game  = new MyClass(ct);
+               Game game  = new Game(ct);
                game.Load();
                Gdx.app.postRunnable(new Runnable() {
                    @Override
@@ -27,7 +25,7 @@ public class GameManager extends Game {
     }
     public boolean isFirst = false;
 
-    MyClass cl;
+    Game cl;
     Context ct;
 
     public GameManager(Context ct) {
@@ -67,7 +65,7 @@ public class GameManager extends Game {
             cl.render(Gdx.graphics.getDeltaTime());
         }
         else{
-            MyClass.manager.update();
+            Game.manager.update();
         }
     }
 

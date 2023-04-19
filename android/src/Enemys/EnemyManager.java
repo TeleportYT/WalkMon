@@ -1,17 +1,15 @@
 package Enemys;
 
-import static com.vik.test.MyClass.context;
-import static com.vik.test.MyClass.mapLevel;
-import static com.vik.test.MyClass.stats;
+import static com.vik.test.Game.context;
+import static com.vik.test.Game.mapLevel;
+import static com.vik.test.Game.stats;
 
 import android.content.Intent;
 import android.util.Log;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.vik.test.Difficulty;
 import com.vik.test.FireballManager;
-import com.vik.test.MyClass;
+import com.vik.test.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class EnemyManager {
             case Medium:
                 warriors = 10+ new Random().nextInt(5);
                 bobs = 5+new Random().nextInt(5);
-                duplicators = 0+new Random().nextInt(2);
+                duplicators = new Random().nextInt(2);
                 break;
             case Hard:
                 warriors = 10+ new Random().nextInt(7);
@@ -72,7 +70,7 @@ public class EnemyManager {
             if(warriors!=0){
                 int x = (rand.nextInt(mapLevel.getSize()));
                 int z = (rand.nextInt(mapLevel.getSize()));
-                while ((MyClass.mapLevel.getCollision(x,z) != 1)){
+                while ((Game.mapLevel.getCollision(x,z) != 1)){
                     x = (rand.nextInt(mapLevel.getSize()));
                     z = (rand.nextInt(mapLevel.getSize()));
                 }
@@ -83,7 +81,7 @@ public class EnemyManager {
             if(bobs!=0){
                 int x = (rand.nextInt(mapLevel.getSize()));
                 int z = (rand.nextInt(mapLevel.getSize()));
-                while ((MyClass.mapLevel.getCollision(x,z) != 1)){
+                while ((Game.mapLevel.getCollision(x,z) != 1)){
                     x = (rand.nextInt(mapLevel.getSize()));
                     z = (rand.nextInt(mapLevel.getSize()));
                 }
@@ -94,7 +92,7 @@ public class EnemyManager {
             if(duplicators!=0){
                 int x = (rand.nextInt(mapLevel.getSize()));
                 int z = (rand.nextInt(mapLevel.getSize()));
-                while ((MyClass.mapLevel.getCollision(x,z) != 1)){
+                while ((Game.mapLevel.getCollision(x,z) != 1)){
                     x = (rand.nextInt(mapLevel.getSize()));
                     z = (rand.nextInt(mapLevel.getSize()));
                 }

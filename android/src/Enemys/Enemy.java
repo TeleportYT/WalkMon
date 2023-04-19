@@ -8,8 +8,8 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.vik.test.PlayerController;
 
-import static com.vik.test.MyClass.*;
-import static com.vik.test.MyClass.pc;
+import static com.vik.test.Game.*;
+import static com.vik.test.Game.pc;
 
 import android.util.Log;
 
@@ -20,7 +20,7 @@ public abstract class Enemy {
     protected float HP=100f;
     protected float Damage = 10f;
     protected EnemyType type;
-    private Scene enemyModel;
+    protected Scene enemyModel;
     public ModelInstance getModelInstance() {
         return modelInstance;
     }

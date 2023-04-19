@@ -17,8 +17,8 @@ import Enemys.Warrior;
 public class Bullet extends Projectiles {
 
     public Bullet(float damage, float speed, Vector3 position, Vector3 direction) {
-        super(damage, speed, position, direction, MyClass.mapLevel,new ModelInstance(new ModelBuilder()
-                .createCapsule(0.05f, .1f, 10, new Material(ColorAttribute.createAmbient(Color.YELLOW)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
+        super(damage, speed, position, direction, Game.mapLevel,new ModelInstance(new ModelBuilder()
+                .createCapsule(0.05f, .1f, 10, new Material(ColorAttribute.createDiffuse(Color.YELLOW)), VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position)
         ));
         this.position.mulAdd(this.direction,-0.4f);
     }
@@ -61,7 +61,7 @@ public class Bullet extends Projectiles {
             enemy.GetDamage(10f);
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
             Gdx.app.debug("shoot","hitted");
-            MyClass.instances.remove(this.model);
+            Game.instances.remove(this.model);
             BulletManager.bullets.remove(this);
     }
 }

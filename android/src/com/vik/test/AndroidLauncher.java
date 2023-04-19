@@ -86,6 +86,7 @@ public class AndroidLauncher extends AndroidApplication {
 		ConstraintLayout l = (ConstraintLayout) findViewById(R.id.ct);
 		View v = initializeForView(new BgMoving(), config);
 		l.addView(v);
+		v.setVisibility(View.INVISIBLE);
 		views.add(v);
 
 

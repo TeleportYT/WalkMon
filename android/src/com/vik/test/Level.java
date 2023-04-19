@@ -33,14 +33,12 @@ public class Level {
     private int Size;
     private int maxLength;
     private int maxTunnels;
-    private World world;
     public int startX,startY;
 
-    public Level(int Size, int maxLength, int maxTunnels,World world){
+    public Level(int Size, int maxLength, int maxTunnels){
         this.Size = Size;
         this.maxLength = maxLength;
         this.maxTunnels = maxTunnels;
-        this.world = world;
         mapArr = new int[this.Size][this.Size];
         this.wallsList = new ArrayList<>();
         this.floorsList = new ArrayList<>();

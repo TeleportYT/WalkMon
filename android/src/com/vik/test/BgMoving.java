@@ -44,7 +44,6 @@ public class BgMoving extends ApplicationAdapter {
     private PerspectiveCamera cam;
     public ModelBatch modelBatch;
     public static List<ModelInstance> instances;
-    private World world;
     private Environment environment;
 
 
@@ -72,7 +71,6 @@ public class BgMoving extends ApplicationAdapter {
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
 
-        world = new World();
         modelBatch = new ModelBatch();
         instances = new ArrayList<>();
 
@@ -141,7 +139,6 @@ public class BgMoving extends ApplicationAdapter {
     @Override
     public void render () {
 
-        world.Update(Gdx.graphics.getDeltaTime());
 
         Gdx.gl20.glClearColor(0.44f, 0.85f, 0.69f, 0);
         Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -168,7 +165,6 @@ public class BgMoving extends ApplicationAdapter {
     @Override
     public void dispose () {
         modelBatch.dispose();
-        world.Dispose();
         sceneManager.dispose();
         sceneAsset.dispose();
         environmentCubemap.dispose();

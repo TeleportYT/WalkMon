@@ -10,12 +10,12 @@ import Enemys.Enemy;
 
 public class Projectiles {
 
-    public ModelInstance model;
-    public float damage;
-    public float speed;
-    public Vector3 position;
-    public Vector3 direction;
-    public Level lvl;
+    protected ModelInstance model;
+    protected float damage;
+    protected float speed;
+    protected Vector3 position;
+    protected Vector3 direction;
+    protected Level lvl;
 
     public Projectiles(float damage, float speed, Vector3 position, Vector3 direction,Level lvl,ModelInstance model){
         this.damage = damage;
@@ -26,7 +26,7 @@ public class Projectiles {
         this.direction.set(direction);
         this.lvl = lvl;
         this.model = model;
-        MyClass.instances.add(model);
+        Game.instances.add(model);
 
     }
 
@@ -46,16 +46,12 @@ public class Projectiles {
         model.transform.set(position,quaternion);
 
         if (lvl.getCollision((int)(model.transform.getTranslation(new Vector3()).x+colX),(int)model.transform.getTranslation(new Vector3()).z)==0){
-            MyClass.instances.remove(model);
+            Game.instances.remove(model);
             FireballManager.fireballs.remove(this);
         }else if(lvl.getCollision((int)(model.transform.getTranslation(new Vector3()).x),(int)(model.transform.getTranslation(new Vector3()).z+colZ))==0){
-            MyClass.instances.remove(model);
+            Game.instances.remove(model);
             FireballManager.fireballs.remove(this);
         }
-
-    }
-
-    public void Collision(String collidorName,Enemy enemy) {
 
     }
 

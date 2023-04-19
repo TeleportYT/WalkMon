@@ -1,6 +1,6 @@
 package Enemys;
 
-import com.vik.test.MyClass;
+import com.vik.test.Game;
 
 public class Minion extends Warrior{
     private Duplicator father;
@@ -16,6 +16,6 @@ public class Minion extends Warrior{
     @Override
     public void Die(){
         father.getMinions().remove(this);
-        MyClass.instances.remove(this.modelInstance);
+        Game.instances.remove(this.modelInstance);
     }
 }

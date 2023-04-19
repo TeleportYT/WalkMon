@@ -33,6 +33,7 @@ public class musicService  extends Service {
         player = new MediaPlayer();
         player = MediaPlayer.create(getApplicationContext(),clips.get(0));
         player.start();
+        player.setLooping(true);
         return 0;
     }
 

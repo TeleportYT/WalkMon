@@ -50,8 +50,8 @@ public class ModelsManager {
 
         // setup light
         light = new DirectionalLightEx();
-        light.direction.set(1, -3, 1).nor();
-        light.color.set(Color.WHITE);
+        light.direction.set(1, 0, 1).nor();
+        light.color.set(Color.BLACK);
         sceneManager.environment.add(light);
 
         // setup quick IBL (image based lighting)

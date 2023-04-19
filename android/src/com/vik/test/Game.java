@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
@@ -15,16 +13,16 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Timer;
 
 
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
@@ -36,7 +34,7 @@ import java.util.List;
 import Enemys.EnemyManager;
 
 
-public class MyClass implements Screen {
+public class Game implements Screen {
 	public static Context context;
 	private PerspectiveCamera cam;
 	public static Level mapLevel;
@@ -47,9 +45,7 @@ public class MyClass implements Screen {
     public static List<ModelInstance> instances;
     public static EnemyManager enemies;
 	public static GameStats stats;
-    private World world;
 	public static GameUI GameUI;
-	public static GameScene scene;
 	public static AssetManager manager;
 	private boolean isRunning = false;
 	private double gameTime=0;
@@ -60,7 +56,7 @@ public class MyClass implements Screen {
 		return manager.isFinished();
 	}
 
-    public MyClass(Context ct){
+    public Game(Context ct){
     	context = ct;
 	}
 	public void Load(){
@@ -97,29 +93,26 @@ public class MyClass implements Screen {
 
 
         modelBuilder = new ModelBuilder();
-		// load world
-		world = new World();
 		// setup camera
 		cam = new PerspectiveCamera(65, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		cam.position.set(0, 10, 0);
 		cam.near = .10f;
 		cam.far = 30f;
 		cam.update();
-		scene = new GameScene(cam);
 		mg = new ModelsManager(cam,manager);
 		// setup controller for camera
 		camController = new MyFPS(cam);
 		instances = new ArrayList<>();
 		modelBatch = new ModelBatch();
 
-				mapLevel = new Level(20,8,50,world);
+				mapLevel = new Level(20,8,50);
 				List<Wall> walls = mapLevel.getWalls();
 
 				for (int i = 0; i < walls.size(); i++){
 					instances.add(walls.get(i).getMi());
 				}
 				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-				enemies = new EnemyManager(Difficulty.Testing);
+				enemies = new EnemyManager(Difficulty.Easy);
 
 
 		GameUI = new GameUI();
@@ -132,8 +125,10 @@ public class MyClass implements Screen {
 
 		loadPlayer();
 
-	}
 
+
+
+	}
 	private void loadPlayer() {
 		// setup player
 		pc = new PlayerController(cam);
@@ -155,7 +150,6 @@ public class MyClass implements Screen {
 			Log.d("TimeD", "F: " + gameTime);
 			camController.update();
 			cam.position.y = 0.5f;
-			world.Update(Gdx.graphics.getDeltaTime());
 			pc.update();
 
 
@@ -164,7 +158,6 @@ public class MyClass implements Screen {
 			Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 			cam.update();
-			scene.Update(cam);
 			enemies.Update();
 		}
 
@@ -178,7 +171,7 @@ public class MyClass implements Screen {
 
 
 			modelBatch.begin(cam);
-			modelBatch.render(instances, world.getEnvironment());
+			modelBatch.render(instances);
 			modelBatch.end();
 
 		GameUI.Update();
@@ -216,7 +209,6 @@ public class MyClass implements Screen {
 	public void dispose () {
 		GameUI.st.dispose();
 		modelBatch.dispose();
-		world.Dispose();
 		manager.dispose();
 	}
 

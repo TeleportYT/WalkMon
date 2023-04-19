@@ -17,7 +17,7 @@ public class Duplicator extends Enemy{
     }
 
     private ArrayList<Minion> minions;
-    public float spawnTimer = 10f;
+    private float spawnTimer = 10f;
 
 
     public Duplicator(float x, float z) {

@@ -17,8 +17,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/menubg2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.8"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.7" />
+
     <LinearLayout
-        android:background="@drawable/rounded"
         android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -61,9 +72,8 @@
                 android:textAlignment="viewEnd"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#000000"
-                android:textSize="48sp"
                 app:autoSizeMaxTextSize="40sp"
-                app:autoSizeTextType="none" />
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/time"
@@ -93,12 +103,11 @@
 
                 android:fontFamily="@font/gungeon"
                 android:gravity="center|right"
-                android:text="Enemies Killed  "
+                android:text=" Enemies Killed  "
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textSize="48sp"
+                android:textColor="#000000"
                 app:autoSizeMaxTextSize="40sp"
-                app:autoSizeTextType="none"
-                android:textColor="#000000" />
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/killed"
@@ -128,12 +137,11 @@
                 android:fontFamily="@font/gungeon"
                 android:gravity="center|right"
 
-                android:text="Player Health  "
+                android:text=" Player Health  "
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#000000"
-                android:textSize="48sp"
                 app:autoSizeMaxTextSize="40sp"
-                app:autoSizeTextType="none" />
+                app:autoSizeTextType="uniform" />
 
             <TextView
                 android:id="@+id/hp"
