@@ -13,7 +13,6 @@
 
         <TextView
             android:id="@+id/state"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#FF0000"
@@ -22,6 +21,7 @@
             android:lines="1"
             android:text="Winned"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
             android:textStyle="bold"
             app:autoSizeTextType="none" />
     </LinearLayout>
@@ -37,13 +37,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
             android:fontFamily="@font/gungeon"
             android:gravity="center|left"
             android:lines="1"
             android:text="  Score  "
             android:textAlignment="viewEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
             app:autoSizeMaxTextSize="40sp"
             app:autoSizeTextType="uniform" />
 
@@ -54,10 +54,10 @@
             android:layout_weight="1"
             android:fontFamily="@font/gungeon"
             android:gravity="center|right"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
             android:lines="1"
             android:text="1400  "
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
             app:autoSizeTextType="uniform" />
     </LinearLayout>
 
@@ -72,13 +72,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
             android:fontFamily="@font/gungeon"
             android:gravity="center|left"
             android:lines="1"
             android:text="  Time  "
             android:textAlignment="viewEnd"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
             app:autoSizeMaxTextSize="40sp"
             app:autoSizeTextType="uniform" />
 
@@ -92,7 +92,7 @@
             android:lines="1"
             android:text="14:00  "
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textColor="#FFFFFF"
             app:autoSizeTextType="uniform" />
     </LinearLayout>
 
@@ -112,7 +112,7 @@
             android:lines="1"
             android:text="  Enemies Killed  "
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textColor="#FFFFFF"
             app:autoSizeMaxTextSize="40sp"
             app:autoSizeTextType="uniform" />
 
@@ -126,7 +126,7 @@
             android:lines="1"
             android:text="32  "
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textColor="#FFFFFF"
             app:autoSizeTextType="uniform" />
     </LinearLayout>
 
@@ -146,7 +146,7 @@
             android:lines="1"
             android:text="  Player Health  "
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textColor="#FFFFFF"
             app:autoSizeMaxTextSize="40sp"
             app:autoSizeTextType="uniform" />
 
@@ -160,7 +160,7 @@
             android:lines="1"
             android:text="100           "
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="?android:attr/textColorPrimaryNoDisable"
+            android:textColor="#FFFFFF"
             app:autoSizeTextType="uniform" />
     </LinearLayout>
 </LinearLayout>

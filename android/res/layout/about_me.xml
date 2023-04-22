@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/bgnew"
     android:layout_height="match_parent">
 
     <TextView
@@ -14,6 +15,7 @@
         android:text="About Me"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FF9100"
         android:textStyle="bold"
         app:autoSizeTextType="uniform"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +29,7 @@
         android:layout_height="0dp"
         android:fontFamily="@font/gungeon"
         android:text="Hello my name is Vivien Evgueniev and my id: 215360835,\nThis is WalkMon, a game where you need to clean the auto generated room with a lot of enemies"
+        android:textColor="#FF9100"
         android:textSize="34sp"
         app:autoSizeTextType="none"
         app:layout_constraintBottom_toTopOf="@+id/textView6"
@@ -42,6 +45,7 @@
         android:layout_height="0dp"
         android:fontFamily="@font/gungeon"
         android:text="The controls of the game are simple\nMoving: you have a joystick which you use to move with, if you move it up you will go forward and if you go down you move backwards and etc.\nCamera Control: in order to move the camera you just need to drag your finger on the screen and then the camera moves to which ever direction you moved your finger"
+        android:textColor="#FF9100"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/button8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +61,7 @@
         android:fontFamily="@font/gungeon"
         android:text="Return"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="?android:attr/textColorPrimaryNoDisable"
+        android:textColor="#FF9100"
         android:textSize="24sp"
         android:textStyle="bold"
         app:iconTint="#00FFFFFF"

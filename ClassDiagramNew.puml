@@ -1,0 +1,451 @@
+@startuml
+class com.vik.test.FireBall {
++ <<Create>> FireBall(float,float,Vector3,Vector3,Level)
++ void Update()
++ void Collision()
+}
+class Enemys.Duplicator {
+- ArrayList<Minion> minions
+- float spawnTimer
++ <<Create>> Duplicator(float,float)
++ ArrayList<Minion> getMinions()
++ void setMinions(ArrayList<Minion>)
++ void Update()
++ void Duplicate()
++ void Die()
++ String toString()
+}
+class Enemys.Warrior {
+- float attackTimer
++ <<Create>> Warrior(float,float)
++ void Update()
++ void Attack(Vector3)
++ String toString()
+}
+class com.vik.test.StatsAdpter {
++ <<Create>> StatsAdpter(Context,List<GameStats>)
++ View getView(int,View,ViewGroup)
+}
+enum com.vik.test.GameState {
++  Win
++  Lose
++  InGame
+}
+class com.vik.test.ModelsManager {
+- SceneManager sceneManager
+- SceneAsset sceneAsset
+- Scene scene
+- SceneSkybox skybox
+- Cubemap diffuseCubemap
+- Cubemap environmentCubemap
+- Cubemap specularCubemap
+- Texture brdfLUT
+- float time
+- DirectionalLightEx light
+- PerspectiveCamera cam
+- AssetManager manager
++ <<Create>> ModelsManager(PerspectiveCamera,AssetManager)
++ SceneManager getSceneManager()
++ Scene AddEnemy(EnemyType,float,float)
++ void dispose()
+}
+class Enemys.Minion {
+- Duplicator father
++ <<Create>> Minion(float,float,Duplicator)
++ void Die()
+}
+class com.vik.test.AboutMe {
+# void onCreate(Bundle)
+}
+class com.vik.test.SoundEffects {
+- Music walking
+- Music inGame
+- AssetManager manager
+~ SharedPreferences prefs
+~ SharedPreferences.Editor myEdit
+- float SEvolume
+~ boolean isPaused
+- BroadcastReceiver receiver
++ <<Create>> SoundEffects(AssetManager)
++ void Walk(boolean)
++ void GettingDamaged()
++ void LowerSoundEffects(float)
++ void VolumeMusic(float)
++ void Shoot()
++ void dispose()
+}
+class com.vik.test.LeaderboardAdapter {
+~ List<String> usernames
++ <<Create>> LeaderboardAdapter(Context,List<GameStats>,List<String>)
++ View getView(int,View,ViewGroup)
+}
+class com.vik.test.Menu {
+- Label menuName
+- Table table
+~ Image bg
+~ boolean isToggled
+~ Container<Slider> sliderContainer
++ <<Create>> Menu(String,Skin,Stage)
++ Table getTable()
++ void setVisible(boolean)
++ ArrayList<Actor> PrepareActors(Skin)
++ void MakeMenu(ArrayList<Actor>,Stage)
++ BitmapFont generatefont()
+}
+class com.vik.test.GameLayout {
+- TextView loadingTxt
+- LottieAnimationView loadingAnim
+- ImageView bg
+# void onCreate(Bundle)
++ void LoadGame(ConstraintLayout)
++ void updateLoadingText(GameManager)
+}
+class com.vik.test.GameStatsDbHelper {
++ {static} int DATABASE_VERSION
++ {static} String DATABASE_NAME
+- {static} String SQL_CREATE_ENTRIES
+- {static} String SQL_DELETE_ENTRIES
++ <<Create>> GameStatsDbHelper(Context)
++ void onCreate(SQLiteDatabase)
++ void onUpgrade(SQLiteDatabase,int,int)
++ void onDowngrade(SQLiteDatabase,int,int)
++ String[] GetData(int)
++ List<GameStats> getAllGameStats()
++ GameStats getGameStatsWithBestScore()
+}
+class com.vik.test.Level {
+- int[][] mapArr
+- List<Wall> wallsList
+- List<Floor> floorsList
+- int Size
+- int maxLength
+- int maxTunnels
++ int startX
++ <<Create>> Level(int,int,int)
++ int getSize()
++ int getCollision(int,int)
++ boolean lineOfSightCheap(Vector3,Vector3)
++ List<Wall> getWalls()
+}
+class com.vik.test.Floor {
+- Model md
+- ModelInstance mi
+- float x
++ <<Create>> Floor(float,float,float,float)
++ Model BuildFloor()
+}
+enum com.vik.test.Difficulty {
++  Easy
++  Medium
++  Hard
++  Testing
+}
+class com.vik.test.GameUI {
++ {static} Stage st
+- Skin skin
++ Touchpad th
++ Image crossair
++ Image BloodEffect
++ Button shotBt
++ boolean isMenu
++ Menu menu
+- BroadcastReceiver receiver
++ <<Create>> GameUI()
++ Stage getSt()
++ void Update()
++ Stage GetStage()
+}
+class com.vik.test.User {
+- String username
+- int Kills
+- int money
+- String pfpUri
++ <<Create>> User(String,int,int,String)
+- <<Create>> User()
++ String getUsername()
++ void setUsername(String)
++ int getKills()
++ void setKills(int)
++ int getMoney()
++ void setMoney(int)
++ String getPfpUri()
++ void setPfpUri(String)
+}
+class Enemys.EnemyManager {
++ {static} List<Enemy> enemyies
++ {static} FireballManager fbManager
++ {static} List<Duplicator> Duplicators
+~ {static} float DuplicatorPoints
+~ {static} float bobPoints
+~ {static} float warriorPoints
+- int enemiesAmount
+~ boolean isFinished
++ <<Create>> EnemyManager(Difficulty)
++ void GenerateByDifficulty(Difficulty)
++ void GenerateEnemys(int,int,int)
++ void Update()
++ {static} void AddEnemy(Enemy)
++ {static} void RemoveEnemy(Enemy)
+}
+class com.vik.test.musicService {
+- IBinder binder
+~ MediaPlayer player
+~ ArrayList<Integer> clips
++ IBinder onBind(Intent)
++ int onStartCommand(Intent,int,int)
++ void pauseMusic()
++ void ResumeMusic()
++ void ChangeMusic(int)
++ void onDestroy()
+}
+class com.vik.test.musicService.LocalBinder {
+~ musicService getService()
+}
+class com.vik.test.Projectiles {
+# ModelInstance model
+# float damage
+# float speed
+# Vector3 position
+# Vector3 direction
+# Level lvl
++ <<Create>> Projectiles(float,float,Vector3,Vector3,Level,ModelInstance)
++ void Update()
+}
+abstract class Enemys.Enemy {
+# float HP
+# float Damage
+# EnemyType type
+# Scene enemyModel
+# ModelInstance modelInstance
+# Vector3 position
+# Vector3 direction
+# Quaternion quaternion
+# float moveSpeed
+# Vector3 moveVector
+# Vector3 tmpVector
++ <<Create>> Enemy(float,float,EnemyType)
++ ModelInstance getModelInstance()
++ Vector3 getPosition()
++ void setPosition(Vector3)
++ void Update()
++ Boolean ifSeePlayer(Vector3)
++ void Attack(Vector3)
++ void GetDamage(float)
++ void Die()
+}
+class Enemys.Bob {
+- float shootTimer
++ <<Create>> Bob(float,float)
++ void Update()
++ void Attack(Vector3)
++ String toString()
+}
+class com.vik.test.GameStatsContract {
+- <<Create>> GameStatsContract()
+}
+class com.vik.test.GameStatsContract.GameStatsEntry {
++ {static} String TABLE_NAME
++ {static} String COLUMN_NAME_PLAYER_HEALTH
++ {static} String COLUMN_NAME_PLAYER_SCORE
++ {static} String COLUMN_NAME_ENEMIES_KILLED
++ {static} String COLUMN_NAME_TIME
++ {static} String COLUMN_NAME_STATE
+}
+class com.vik.test.BulletManager {
++ {static} List<Bullet> bullets
+- Iterator<Bullet> checker
++ <<Create>> BulletManager()
++ void AddBullet(Bullet)
++ void Update()
+}
+class com.vik.test.GameManager {
++ boolean isFirst
+~ Game cl
+~ Context ct
++ <<Create>> GameManager(Context)
++ void create()
++ void dispose()
++ void pause()
++ void resume()
++ void render()
++ boolean isLoaded()
+}
+class com.vik.test.Game {
++ {static} Context context
+- PerspectiveCamera cam
++ {static} Level mapLevel
++ ModelBatch modelBatch
++ ModelBuilder modelBuilder
+- MyFPS camController
++ {static} PlayerController pc
++ {static} List<ModelInstance> instances
++ {static} EnemyManager enemies
++ {static} GameStats stats
++ {static} GameUI GameUI
++ {static} AssetManager manager
+- boolean isRunning
+- double gameTime
++ {static} SoundEffects sd
++ {static} ModelsManager mg
+~ InputMultiplexer multiplexer
+- boolean isPaused
+- BroadcastReceiver receiver
++ <<Create>> Game(Context)
++ boolean isLoaded()
++ void Load()
++ void create()
+- void loadPlayer()
++ void render(float)
++ void show()
++ void resize(int,int)
++ void pause()
++ void resume()
++ void hide()
++ void dispose()
+}
+class com.vik.test.Bullet {
++ <<Create>> Bullet(float,float,Vector3,Vector3)
++ void Update()
++ void Collision(Enemy)
+}
+class com.vik.test.GameOver {
+- FirebaseAuth mAuth
+# void onCreate(Bundle)
+- void ShowStats(int)
++ void OnClick(View)
+}
+class com.vik.test.GameStats {
+- float playerHealth
+- float playerScore
+- int enemiesKilled
+- String time
+- GameState state
++ <<Create>> GameStats()
++ void setPlayerScore(float)
++ void setEnemiesKilled(int)
++ float getPlayerHealth()
++ void setPlayerHealth(float)
++ float getPlayerScore()
++ void addPlayerScore(float)
++ int getEnemiesKilled()
++ void incrementEnemiesKilled()
++ String getTime()
++ void setTime(String)
++ GameState getState()
++ void setState(GameState)
++ long FinishGame(GameState,Context)
+}
+class com.vik.test.Wall {
+- Model md
+- ModelInstance mi
+- float x
++ <<Create>> Wall(float,float,float)
++ ModelInstance getMi()
++ Model CreateBox()
+}
+class com.vik.test.MyFPS {
+~ PlayerController pl
+~ boolean isPaused
+- BroadcastReceiver receiver
++ <<Create>> MyFPS(Camera)
++ void setPl(PlayerController)
++ boolean touchDragged(int,int,int)
+}
+class com.vik.test.FireballManager {
++ {static} List<FireBall> fireballs
+- Iterator<FireBall> checker
++ <<Create>> FireballManager()
++ void AddFireBall(FireBall)
++ void Update()
+}
+enum Enemys.EnemyType {
++  warrior
++  bob
++  duplicator
++  minion
+}
+class com.vik.test.AllStats {
+~ ListView lt
+~ GameStatsDbHelper dbHelper
+~ List<GameStats> Allstats
+~ StatsAdpter Useradapter
+- FirebaseAuth mAuth
+# void onCreate(Bundle)
++ void ShowLeaderboard()
++ Map<String,GameStats> SortMap(Map<String,GameStats>)
++ List<GameStats> ReturnSortedStats(Map<String,GameStats>)
++ List<String> ReturnSortedUsernames(Map<String,GameStats>)
+}
+class com.vik.test.AndroidLauncher {
+- {static} int RC_SIGN_IN
+- FirebaseAuth mAuth
+- GoogleSignInClient mGoogleSignInClient
+- TextView username
+- ImageView pfp
++ ArrayList<View> views
+- Button play
+- Dialog settingsMenu
+~ User player
+~ musicService musicS
+~ boolean isBound
+- ServiceConnection connection
+# void onCreate(Bundle)
++ void LoadViews()
+- void requestPermission()
++ void OnClick(View)
++ void ShowPopup()
++ void onBackPressed()
++ void ShowExit()
+# void onStart()
++ void onActivityResult(int,int,Intent)
+- void firebaseAuthWithGoogle(GoogleSignInAccount)
++ void UpdateUI(FirebaseUser)
++ void setUpMusic()
+# void onPause()
+# void onResume()
+# void onDestroy()
+}
+class com.vik.test.PlayerController {
++ PerspectiveCamera cam
++ Vector3 playerMove
++ float hp
++ {static} Vector3 position
+~ float moveSpeed
+- Vector3 moveVector
+- Vector3 tmpVector
+- GameUI knob
+- boolean attack
++ {static} BulletManager blManager
++ double attackTimer
++ <<Create>> PlayerController(PerspectiveCamera)
++ void update()
++ void MovePlayer(float,float)
++ void Fire()
++ void Damage(float,EnemyType)
++ void Die()
+}
+
+
+com.vik.test.Projectiles <|-- com.vik.test.FireBall
+Enemys.Enemy <|-- Enemys.Duplicator
+Enemys.Enemy <|-- Enemys.Warrior
+android.widget.ArrayAdapter <|-- com.vik.test.StatsAdpter
+Enemys.Warrior <|-- Enemys.Minion
+android.app.Activity <|-- com.vik.test.AboutMe
+android.widget.ArrayAdapter <|-- com.vik.test.LeaderboardAdapter
+com.badlogic.gdx.backends.android.AndroidApplication <|-- com.vik.test.GameLayout
+android.database.sqlite.SQLiteOpenHelper <|-- com.vik.test.GameStatsDbHelper
+android.app.Service <|-- com.vik.test.musicService
+com.vik.test.musicService +.. com.vik.test.musicService.LocalBinder
+com.vik.test.Binder <|-- com.vik.test.musicService.LocalBinder
+Enemys.Enemy <|-- Enemys.Bob
+com.vik.test.GameStatsContract +.. com.vik.test.GameStatsContract.GameStatsEntry
+com.vik.test.BaseColumns <|.. com.vik.test.GameStatsContract.GameStatsEntry
+com.vik.test.Game <|-- com.vik.test.GameManager
+com.badlogic.gdx.Screen <|.. com.vik.test.Game
+com.vik.test.Projectiles <|-- com.vik.test.Bullet
+android.app.Activity <|-- com.vik.test.GameOver
+com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController <|-- com.vik.test.MyFPS
+android.app.Activity <|-- com.vik.test.AllStats
+android.app.Activity <|-- com.vik.test.AndroidLauncher
+@enduml

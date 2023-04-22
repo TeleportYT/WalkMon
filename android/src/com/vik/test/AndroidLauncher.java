@@ -3,24 +3,35 @@ package com.vik.test;
 import static android.content.ContentValues.TAG;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +66,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends Activity {
 
 	private static final int RC_SIGN_IN = 9001;
 	private FirebaseAuth mAuth;
@@ -64,7 +75,7 @@ public class AndroidLauncher extends AndroidApplication {
 	private ImageView pfp;
 	public ArrayList<View> views;
 	private Button play,settings,about,exit;
-
+	private Dialog settingsMenu;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,23 +84,13 @@ public class AndroidLauncher extends AndroidApplication {
 		views = new ArrayList<View>();
 		mAuth = FirebaseAuth.getInstance();
 		LoadViews();
+		settingsMenu = new Dialog(this);
 	}
 
 	public void LoadViews(){
 		play = (Button) findViewById(R.id.Bitch);
 		play.setOnClickListener(this::OnClick);
 		views.add(play);
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		config.useAccelerometer = false;
-		config.useCompass = false;
-
-		ConstraintLayout l = (ConstraintLayout) findViewById(R.id.ct);
-		View v = initializeForView(new BgMoving(), config);
-		l.addView(v);
-		v.setVisibility(View.INVISIBLE);
-		views.add(v);
-
-
 
 		LinearLayout lt = (LinearLayout)findViewById(R.id.lt);
 
@@ -108,6 +109,15 @@ public class AndroidLauncher extends AndroidApplication {
 		settings = findViewById(R.id.button);
 		about = findViewById(R.id.button2);
 		exit = findViewById(R.id.button3);
+
+
+
+		settings.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				ShowPopup();
+			}
+		});
 
 
 		about.setOnClickListener(new View.OnClickListener() {
@@ -166,6 +176,105 @@ public class AndroidLauncher extends AndroidApplication {
 
 
 
+	public void ShowPopup(){
+		settingsMenu.setContentView(R.layout.settings_popup);
+
+		SharedPreferences.Editor myEdit;
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+
+
+
+		myEdit = prefs.edit();
+
+
+		Resources res = getApplicationContext().getResources();
+		for (int i =0 ; i<4;i++){
+			int id = res.getIdentifier("sTxt"+(i+1), "id", getApplicationContext().getPackageName());
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				((TextView)settingsMenu.findViewById(id)).setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+			}
+			((TextView)settingsMenu.findViewById(id)).setLines(1);
+		}
+
+
+		SeekBar volume = settingsMenu.findViewById(R.id.volumeBar);
+
+		volume.setProgress((int)prefs.getFloat("Music",100));
+
+		volume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+				myEdit.putFloat("Music",i);
+				myEdit.apply();
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+
+
+		SeekBar effects = settingsMenu.findViewById(R.id.effectsBar);
+
+		effects.setProgress((int)prefs.getFloat("Music",100));
+
+		effects.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+				myEdit.putFloat("SoundEffect",i);
+				myEdit.apply();
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {
+
+			}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {
+
+			}
+		});
+
+
+
+		Spinner difficulty = settingsMenu.findViewById(R.id.spinner);
+
+
+
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.difficulty,android.R.layout.simple_spinner_item);
+
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+		difficulty.setAdapter(adapter);
+		difficulty.setSelection(prefs.getInt("Difficulty",0));
+		difficulty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+				myEdit.putInt("Difficulty",i);
+				myEdit.apply();
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
+		});
+
+
+
+		settingsMenu.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+		settingsMenu.show();
+	}
+
 
 	//region exit
 	@Override
@@ -183,7 +292,9 @@ public class AndroidLauncher extends AndroidApplication {
 				.setCancelable(false)
 				.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
-						finish();
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+							finishAndRemoveTask();
+						}
 					}
 				})
 				.setNegativeButton("No", new DialogInterface.OnClickListener() {

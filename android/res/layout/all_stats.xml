@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
+    android:background="@drawable/dungeon"
     android:layout_height="match_parent">
 
     <TextView
@@ -14,6 +15,7 @@
         android:gravity="center|fill_vertical"
         android:text="Game Stats"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
         android:textSize="60sp"
         android:textStyle="bold"
         android:typeface="normal"
@@ -94,6 +96,7 @@
         android:fontFamily="@font/gungeon"
         android:text="Main Menu"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

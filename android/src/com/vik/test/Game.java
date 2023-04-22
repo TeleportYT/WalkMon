@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.badlogic.gdx.Gdx;
@@ -112,7 +114,30 @@ public class Game implements Screen {
 					instances.add(walls.get(i).getMi());
 				}
 				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-				enemies = new EnemyManager(Difficulty.Easy);
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(((AndroidApplication) Gdx.app).getContext());
+
+		Difficulty choosen;
+
+		switch(prefs.getInt("Difficulty",-1)){
+
+			case 0:
+				choosen = Difficulty.Easy;
+				break;
+			case 1:
+				choosen = Difficulty.Medium;
+				break;
+			case 2:
+				choosen = Difficulty.Hard;
+				break;
+			default:
+				choosen = Difficulty.Easy;
+				break;
+
+		}
+
+
+				enemies = new EnemyManager(choosen);
 
 
 		GameUI = new GameUI();

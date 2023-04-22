@@ -67,11 +67,6 @@ public class SoundEffects {
     }
 
 
-    public void GettingDamaged(){
-
-    }
-
-
 
     public void LowerSoundEffects(float volume){
         if(walking!=null){

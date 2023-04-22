@@ -13,7 +13,6 @@ import Enemys.EnemyType;
 public class PlayerController
 {
     public PerspectiveCamera cam;
-    public Vector3 playerMove;
     public float hp;
 
 
@@ -39,7 +38,7 @@ public class PlayerController
         moveVector = new Vector3();
         tmpVector = new Vector3();
 
-        playerMove = new Vector3();
+
         // load player rigid body
         this.knob = Game.GameUI;
         blManager = new BulletManager();

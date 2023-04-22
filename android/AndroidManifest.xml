@@ -10,7 +10,7 @@
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/menubg2"
         android:isGame="true"
         android:screenOrientation="landscape"
         android:theme="@style/AppTheme"
