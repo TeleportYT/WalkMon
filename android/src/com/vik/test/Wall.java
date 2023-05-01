@@ -14,15 +14,12 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 public class Wall {
     private Model md;
     private ModelInstance mi;
-    private float x,z;
 
 
     public Wall(float x, float z,float y){
         ModelBuilder modelBuilder = new ModelBuilder();
         this.md = CreateBox();
         this.mi = new ModelInstance(this.md);
-        this.x = x;
-        this.z = z;
         this.mi.transform.setToTranslation(x+0.5f,y,z+0.5f);
         Game.instances.add(mi);
     }

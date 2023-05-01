@@ -4,8 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.badlogic.gdx.Gdx;
@@ -37,47 +35,44 @@ import Enemys.EnemyManager;
 
 
 public class Game implements Screen {
-	public static Context context;
 	private PerspectiveCamera cam;
 	public static Level mapLevel;
 	public ModelBatch modelBatch;
 	public ModelBuilder modelBuilder;
-    private MyFPS camController;
-    public static PlayerController pc;
-    public static List<ModelInstance> instances;
-    public static EnemyManager enemies;
+	private MyFPS camController;
+	public static PlayerController pc;
+	public static List<ModelInstance> instances;
+	public static EnemyManager enemies;
 	public static GameStats stats;
 	public static GameUI GameUI;
 	public static AssetManager manager;
-	private boolean isRunning = false;
 	private double gameTime=0;
 	public static SoundEffects sd;
 	public static ModelsManager mg;
 	InputMultiplexer multiplexer;
 	public boolean isLoaded(){
-		return manager.isFinished();
+		return this.manager.isFinished();
 	}
 
-    public Game(Context ct){
-    	context = ct;
+	public Game(){
 	}
 	public void Load(){
 
-		manager = new AssetManager();
-		manager.load("dungeon.png",Texture.class);
-		manager.load("floor.png",Texture.class);
-		manager.load("uiskin.json", Skin.class);
-		manager.load("fire_button.json",Skin.class);
-		manager.load("sound effects/running.mp3", Music.class);
-		manager.load("sound effects/inGameMusic.mp3", Music.class);
-		manager.load("sound effects/flyingEnemy.mp3", Sound.class);
-		manager.load("sound effects/punch.mp3", Sound.class);
-		manager.load("sound effects/shoot.mp3", Sound.class);
+		this.manager = new AssetManager();
+		this.manager.load("dungeon.png",Texture.class);
+		this.manager.load("floor.png",Texture.class);
+		this.manager.load("uiskin.json", Skin.class);
+		this.manager.load("fire_button.json",Skin.class);
+		this.manager.load("sound effects/running.mp3", Music.class);
+		this.manager.load("sound effects/inGameMusic.mp3", Music.class);
+		this.manager.load("sound effects/flyingEnemy.mp3", Sound.class);
+		this.manager.load("sound effects/punch.mp3", Sound.class);
+		this.manager.load("sound effects/shoot.mp3", Sound.class);
 
-		manager.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader());
-		manager.load("spawner.glb",SceneAsset.class);
-		manager.load("enemybug.glb", SceneAsset.class);
-		manager.load("drone.glb", SceneAsset.class);
+		this.manager.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader());
+		this.manager.load("spawner.glb",SceneAsset.class);
+		this.manager.load("enemybug.glb", SceneAsset.class);
+		this.manager.load("drone.glb", SceneAsset.class);
 
 	}
 
@@ -90,63 +85,40 @@ public class Game implements Screen {
 		intentFilter.addAction("Player Healed");
 		intentFilter.addAction("Main Menu");
 		intentFilter.addAction("Stage Cleared");
-        context.registerReceiver(receiver,intentFilter);
+		((AndroidApplication) Gdx.app).getContext().registerReceiver(this.receiver,intentFilter);
 
 
 
-        modelBuilder = new ModelBuilder();
+		this.modelBuilder = new ModelBuilder();
 		// setup camera
-		cam = new PerspectiveCamera(65, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		cam.position.set(0, 10, 0);
-		cam.near = .10f;
-		cam.far = 30f;
-		cam.update();
-		mg = new ModelsManager(cam,manager);
+		this.cam = new PerspectiveCamera(65, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		this.cam.position.set(0, 10, 0);
+		this.cam.near = .10f;
+		this.cam.far = 30f;
+		this.cam.update();
+		this.mg = new ModelsManager(this.cam,this.manager);
 		// setup controller for camera
-		camController = new MyFPS(cam);
-		instances = new ArrayList<>();
-		modelBatch = new ModelBatch();
+		this.camController = new MyFPS(this.cam);
+		this.instances = new ArrayList<>();
+		this.modelBatch = new ModelBatch();
 
-				mapLevel = new Level(20,8,50);
-				List<Wall> walls = mapLevel.getWalls();
+		this.mapLevel = new Level(20,8,50);
+		List<Wall> walls = this.mapLevel.getWalls();
 
-				for (int i = 0; i < walls.size(); i++){
-					instances.add(walls.get(i).getMi());
-				}
-				cam.position.set(mapLevel.startX,0.5f,mapLevel.startY);
-
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(((AndroidApplication) Gdx.app).getContext());
-
-		Difficulty choosen;
-
-		switch(prefs.getInt("Difficulty",-1)){
-
-			case 0:
-				choosen = Difficulty.Easy;
-				break;
-			case 1:
-				choosen = Difficulty.Medium;
-				break;
-			case 2:
-				choosen = Difficulty.Hard;
-				break;
-			default:
-				choosen = Difficulty.Easy;
-				break;
-
+		for (int i = 0; i < walls.size(); i++){
+			this.instances.add(walls.get(i).getMi());
 		}
+		this.cam.position.set(this.mapLevel.startX,0.5f,this.mapLevel.startY);
+		this.enemies = new EnemyManager(Difficulty.Easy);
 
 
-				enemies = new EnemyManager(choosen);
+		this.GameUI = new GameUI();
 
 
-		GameUI = new GameUI();
-
-
-		multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(GameUI.getSt());
-		multiplexer.addProcessor(camController);
-        Gdx.input.setInputProcessor(multiplexer);
+		this.multiplexer = new InputMultiplexer();
+		this.multiplexer.addProcessor(this.GameUI.getSt());
+		this.multiplexer.addProcessor(this.camController);
+		Gdx.input.setInputProcessor(this.multiplexer);
 
 		loadPlayer();
 
@@ -156,11 +128,10 @@ public class Game implements Screen {
 	}
 	private void loadPlayer() {
 		// setup player
-		pc = new PlayerController(cam);
-		camController.setPl(pc);
-		stats = new GameStats();
-		isRunning = true;
-		sd = new SoundEffects(manager);
+		this.pc = new PlayerController(this.cam);
+		this.camController.setPl(this.pc);
+		this.stats = new GameStats();
+		this.sd = new SoundEffects(this.manager);
 
 	}
 
@@ -169,21 +140,21 @@ public class Game implements Screen {
 
 	@Override
 	public void render (float delta) {
-		if (!isPaused) {
+		if (!this.isPaused) {
 			Log.d("Delta", "F: " + Gdx.graphics.getDeltaTime() + " G: " + delta);
-			gameTime += Gdx.graphics.getDeltaTime();
-			Log.d("TimeD", "F: " + gameTime);
-			camController.update();
-			cam.position.y = 0.5f;
-			pc.update();
+			this.gameTime += Gdx.graphics.getDeltaTime();
+			Log.d("TimeD", "F: " + this.gameTime);
+			this.camController.update();
+			this.cam.position.y = 0.5f;
+			this.pc.update();
 
 
 			Gdx.gl20.glClearColor(0, 0f, 0, 0);
 			Gdx.gl20.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-			cam.update();
-			enemies.Update();
+			this.cam.update();
+			this.enemies.Update();
 		}
 
 
@@ -191,15 +162,15 @@ public class Game implements Screen {
 
 
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-		mg.getSceneManager().update(Gdx.graphics.getDeltaTime());
-		mg.getSceneManager().render();
+		this.mg.getSceneManager().update(Gdx.graphics.getDeltaTime());
+		this.mg.getSceneManager().render();
 
 
-			modelBatch.begin(cam);
-			modelBatch.render(instances);
-			modelBatch.end();
+		this.modelBatch.begin(this.cam);
+		this.modelBatch.render(this.instances);
+		this.modelBatch.end();
 
-		GameUI.Update();
+		this.GameUI.Update();
 
 
 	}
@@ -232,9 +203,9 @@ public class Game implements Screen {
 
 	@Override
 	public void dispose () {
-		GameUI.st.dispose();
-		modelBatch.dispose();
-		manager.dispose();
+		this.GameUI.st.dispose();
+		this.modelBatch.dispose();
+		this.manager.dispose();
 	}
 
 

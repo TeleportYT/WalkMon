@@ -14,28 +14,9 @@ public class User {
     private String username;
 
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public int getKills() {
-        return Kills;
-    }
-
-    public void setKills(int kills) {
-        Kills = kills;
-    }
-
-    public int getMoney() {
-        return money;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
-    }
 
     private int Kills=0;
     private int money=0;
@@ -48,9 +29,6 @@ public class User {
         return pfpUri;
     }
 
-    public void setPfpUri(String pfpUri) {
-        this.pfpUri = pfpUri;
-    }
 
     private String pfpUri;
 

@@ -23,7 +23,6 @@ public class SoundEffects {
     private Music walking;
     private Music inGame;
     private AssetManager manager;
-    SharedPreferences prefs;
     SharedPreferences.Editor myEdit;
     public SoundEffects(AssetManager manager) {
 
@@ -33,10 +32,10 @@ public class SoundEffects {
 
 
 
-        myEdit = prefs.edit();
+        this.myEdit = prefs.edit();
 
         this.walking = manager.get("sound effects/running.mp3");
-        walking.setLooping(true);
+        this.walking.setLooping(true);
 
         this.inGame = manager.get("sound effects/inGameMusic.mp3");
         this.inGame.play();
@@ -57,31 +56,30 @@ public class SoundEffects {
 
     public void Walk(boolean isWalking){
         if(isWalking){
-            if(!walking.isPlaying()){
-                walking.play();
+            if(!this.walking.isPlaying()){
+                this.walking.play();
             }
         }
         else{
-            walking.pause();
+            this.walking.pause();
         }
     }
-
 
 
     public void LowerSoundEffects(float volume){
-        if(walking!=null){
-            walking.setVolume(volume/100);
-            SEvolume = volume/100;
+        if(this.walking!=null){
+            this.walking.setVolume(volume/100);
+            this.SEvolume = volume/100;
         }
 
-        myEdit.putFloat("SoundEffect",volume);
-        myEdit.apply();
+        this.myEdit.putFloat("SoundEffect",volume);
+        this.myEdit.apply();
     }
 
     public void VolumeMusic(float volume){
-        inGame.setVolume(volume/100);
-        myEdit.putFloat("Music",volume);
-        myEdit.apply();
+        this.inGame.setVolume(volume/100);
+        this.myEdit.putFloat("Music",volume);
+        this.myEdit.apply();
     }
 
 
@@ -92,39 +90,39 @@ public class SoundEffects {
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-           if(intent.getAction().equals("Pause Game")){
-               if(intent.getBooleanExtra("isPaused",isPaused)){
-                   walking.pause();
-               }
-           }
-           else if(intent.getAction().equals("Player Damaged")){
-               Sound s;
-               switch (intent.getStringExtra("Type")){
-                   case "bob":
+            if(intent.getAction().equals("Pause Game")){
+                if(intent.getBooleanExtra("isPaused",isPaused)){
+                    walking.pause();
+                }
+            }
+            else if(intent.getAction().equals("Player Damaged")){
+                Sound s;
+                switch (intent.getStringExtra("Type")){
+                    case "bob":
                         s = manager.get("sound effects/flyingEnemy.mp3");
-                       s.play(SEvolume);
-                       break;
-                   case "warrior":
+                        s.play(SEvolume);
+                        break;
+                    case "warrior":
                         s = manager.get("sound effects/punch.mp3");
-                       s.play(SEvolume);
-                       break;
-               }
+                        s.play(SEvolume);
+                        break;
+                }
 
 
-           }
+            }
         }
     };
 
 
     public void Shoot(){
-        Sound s = manager.get("sound effects/shoot.mp3");
-        s.play(SEvolume);
+        Sound s = this.manager.get("sound effects/shoot.mp3");
+        s.play(this.SEvolume);
     }
 
 
 
     public void  dispose(){
-        walking.dispose();
+        this.walking.dispose();
     }
 
 }

@@ -31,25 +31,25 @@ public class Projectiles {
     }
 
     public void Update(){
-        position.mulAdd(direction, -speed*Gdx.graphics.getDeltaTime());
+        this.position.mulAdd(direction, -speed*Gdx.graphics.getDeltaTime());
 
         Quaternion quaternion = new Quaternion();
-        Matrix4 instanceRotation = model.transform.cpy().mul(model.transform);
+        Matrix4 instanceRotation = this.model.transform.cpy().mul(this.model.transform);
 
-        instanceRotation.setToLookAt(direction, new Vector3(0,-1,0));
+        instanceRotation.setToLookAt(this.direction, new Vector3(0,-1,0));
         instanceRotation.rotate(0, 0, 1, 180);
         instanceRotation.getRotation(quaternion);
 
-        float colX = position.x==0 ? 0 : (position.x>0 ? .25f : -0.25f);
-        float colZ = position.z==0 ? 0 : (position.z>0 ? .25f : -.25f);
+        float colX = this.position.x==0 ? 0 : (this.position.x>0 ? .25f : -0.25f);
+        float colZ = this.position.z==0 ? 0 : (this.position.z>0 ? .25f : -.25f);
 
         model.transform.set(position,quaternion);
 
-        if (lvl.getCollision((int)(model.transform.getTranslation(new Vector3()).x+colX),(int)model.transform.getTranslation(new Vector3()).z)==0){
+        if (this.lvl.getCollision((int)(this.model.transform.getTranslation(new Vector3()).x+colX),(int)this.model.transform.getTranslation(new Vector3()).z)==0){
             Game.instances.remove(model);
             FireballManager.fireballs.remove(this);
-        }else if(lvl.getCollision((int)(model.transform.getTranslation(new Vector3()).x),(int)(model.transform.getTranslation(new Vector3()).z+colZ))==0){
-            Game.instances.remove(model);
+        }else if(this.lvl.getCollision((int)(this.model.transform.getTranslation(new Vector3()).x),(int)(this.model.transform.getTranslation(new Vector3()).z+colZ))==0){
+            Game.instances.remove(this.model);
             FireballManager.fireballs.remove(this);
         }
 

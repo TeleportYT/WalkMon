@@ -12,19 +12,15 @@ public class Duplicator extends Enemy{
         return minions;
     }
 
-    public void setMinions(ArrayList<Minion> minions) {
-        this.minions = minions;
-    }
-
     private ArrayList<Minion> minions;
     private float spawnTimer = 10f;
 
 
     public Duplicator(float x, float z) {
         super(x, z, EnemyType.duplicator);
-        position = new Vector3(x+0.5f,0.75f,z+0.5f);
-        modelInstance.transform.setTranslation(x+0.5f,0.75f,z+0.5f);
-        minions = new ArrayList<Minion>();
+        this.position = new Vector3(x+0.5f,0.75f,z+0.5f);
+        this.modelInstance.transform.setTranslation(x+0.5f,0.75f,z+0.5f);
+        this.minions = new ArrayList<Minion>();
     }
 
     public void Update(){
@@ -33,27 +29,27 @@ public class Duplicator extends Enemy{
 
         float dt = Gdx.graphics.getDeltaTime();
         this.modelInstance.transform.scale(0.001f,0.001f,0.001f);
-        if(ifSeePlayer(direction) && spawnTimer <= 0){
+        if(ifSeePlayer(this.direction) && this.spawnTimer <= 0){
             Duplicate();
-            spawnTimer = 10f;
+            this.spawnTimer = 10f;
         }
         else{
-            spawnTimer-= dt;
+            this.spawnTimer-= dt;
         }
 
-        for (Enemy minion : minions) {
+        for (Enemy minion : this.minions) {
             minion.Update();
         }
     }
 
     public void Duplicate(){
-        Minion minion = new Minion(position.x,position.z,this);
-        minions.add(minion);
+        Minion minion = new Minion(this.position.x,this.position.z,this);
+        this.minions.add(minion);
     }
 
     @Override
     public void Die(){
-        for (Minion minion : minions) {
+        for (Minion minion : this.minions) {
             minion.Die();
         }
         EnemyManager.Duplicators.remove(this);

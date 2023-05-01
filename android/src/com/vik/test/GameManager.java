@@ -8,28 +8,26 @@ public class GameManager extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
-       new Thread(new Runnable() {
-           @Override
-           public void run() {
-               Game game  = new Game(ct);
-               game.Load();
-               Gdx.app.postRunnable(new Runnable() {
-                   @Override
-                   public void run() {
-                       cl = game;
-                   }
-               });
-           }
-       }).start();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Game game  = new Game();
+                game.Load();
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        cl = game;
+                    }
+                });
+            }
+        }).start();
 
     }
     public boolean isFirst = false;
 
     Game cl;
-    Context ct;
 
-    public GameManager(Context ct) {
-        this.ct = ct;
+    public GameManager() {
 
     }
 
@@ -51,18 +49,18 @@ public class GameManager extends com.badlogic.gdx.Game {
     @Override
     public void render() {
 
-        if(cl == null){
+        if(this.cl == null){
             return;
         }
 
-        if(cl.isLoaded() && !isFirst){
-            isFirst = true;
-            setScreen(cl);
-            cl.show();
+        if(this.cl.isLoaded() && !this.isFirst){
+            this.isFirst = true;
+            setScreen(this.cl);
+            this.cl.show();
 
         }
-        else if (cl.isLoaded()){
-            cl.render(Gdx.graphics.getDeltaTime());
+        else if (this.cl.isLoaded()){
+            this.cl.render(Gdx.graphics.getDeltaTime());
         }
         else{
             Game.manager.update();
@@ -70,9 +68,9 @@ public class GameManager extends com.badlogic.gdx.Game {
     }
 
     public boolean isLoaded() {
-        if(cl == null){
+        if(this.cl == null){
             return false;
         }
-        return cl.isLoaded();
+        return this.cl.isLoaded();
     }
 }

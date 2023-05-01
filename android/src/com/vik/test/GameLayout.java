@@ -61,7 +61,7 @@ public class GameLayout extends AndroidApplication {
         config.useCompass = false;
         loadingTxt.setVisibility(View.VISIBLE);
         loadingAnim.setVisibility(View.VISIBLE);
-        GameManager game = new GameManager(getContext());
+        GameManager game = new GameManager();
         View v = initializeForView(game, config);
         l.addView(v);
        updateLoadingText(game);

@@ -22,34 +22,34 @@ public class musicService  extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
+        return this.binder;
     }
 
 
     @SuppressLint("WrongConstant")
     public int onStartCommand(Intent intent,int flags,int startId)
     {
-        clips.add(R.raw.mainmenu);
-        player = new MediaPlayer();
-        player = MediaPlayer.create(getApplicationContext(),clips.get(0));
-        player.start();
-        player.setLooping(true);
+        this.clips.add(R.raw.mainmenu);
+        this.player = new MediaPlayer();
+        this.player = MediaPlayer.create(getApplicationContext(),this.clips.get(0));
+        this.player.start();
+        this.player.setLooping(true);
         return 0;
     }
 
 
     public void pauseMusic(){
-        player.pause();
+        this.player.pause();
     }
 
     public void ResumeMusic(){
-        player.start();
+        this.player.start();
     }
 
     public void ChangeMusic(int resource){
-        player.stop();
-        player = MediaPlayer.create(getApplicationContext(),resource);
-        player.start();
+        this.player.stop();
+        this.player = MediaPlayer.create(getApplicationContext(),resource);
+        this.player.start();
     }
 
 
@@ -59,10 +59,10 @@ public class musicService  extends Service {
 
 
     public void onDestroy(){
-        if (player.isPlaying()){
-            player.stop();
+        if (this.player.isPlaying()){
+            this.player.stop();
         }
-        player.release();
+        this.player.release();
     }
 
 

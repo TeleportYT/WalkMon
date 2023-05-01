@@ -21,39 +21,39 @@ public class GameStats {
     private GameState state;
 
     public GameStats() {
-        playerHealth = 100;
-        playerScore = 0;
-        enemiesKilled = 0;
-        time = "";
-        state = GameState.InGame;
+        this.playerHealth = 100;
+        this.playerScore = 0;
+        this.enemiesKilled = 0;
+        this.time = "";
+        this.state = GameState.InGame;
     }
 
     public float getPlayerHealth() {
-        return playerHealth;
+        return this.playerHealth;
     }
 
     public void setPlayerHealth(float health) {
-        playerHealth = health;
+        this.playerHealth = health;
     }
 
     public float getPlayerScore() {
-        return playerScore;
+        return this.playerScore;
     }
 
     public void addPlayerScore(float score) {
-        playerScore += score;
+        this.playerScore += score;
     }
 
     public int getEnemiesKilled() {
-        return enemiesKilled;
+        return this.enemiesKilled;
     }
 
     public void incrementEnemiesKilled() {
-        enemiesKilled++;
+        this.enemiesKilled++;
     }
 
     public String getTime() {
-        return time;
+        return this.time;
     }
 
     public void setTime(String time) {
@@ -61,7 +61,7 @@ public class GameStats {
     }
 
     public GameState getState() {
-        return state;
+        return this.state;
     }
 
     public void setState(GameState state) {

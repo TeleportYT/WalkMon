@@ -31,13 +31,13 @@ public class MyFPS extends FirstPersonCameraController {
 
     @Override
     public boolean touchDragged (int screenX, int screenY, int pointer) {
-        if (!isPaused){
+        if (!this.isPaused){
             Log.d("Touch","Y: "+screenY+" x: "+Gdx.input.getX(1)+" pointer: "+pointer);
             float deltaX = -Gdx.input.getDeltaX(pointer) * degreesPerPixel/2;
             float deltaY = -Gdx.input.getDeltaY(pointer) * degreesPerPixel/2;
-            camera.direction.rotate(camera.up, deltaX);
-            tmp.set(camera.direction).crs(camera.up).nor();
-            camera.direction.rotate(tmp, deltaY);
+            this.camera.direction.rotate(this.camera.up, deltaX);
+            this.tmp.set(this.camera.direction).crs(this.camera.up).nor();
+            this.camera.direction.rotate(this.tmp, deltaY);
         }
         return true;
     }

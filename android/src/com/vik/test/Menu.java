@@ -37,30 +37,30 @@ public class Menu {
     private Label menuName;
 
     public Table getTable() {
-        return table;
+        return this.table;
     }
 
 
     private Table table;
 
     public void setVisible(boolean visible) {
-        table.setVisible(visible);
+        this.table.setVisible(visible);
 
-        bg.setVisible(visible);
-        bg.toFront();
-        table.toFront();
+        this.bg.setVisible(visible);
+        this.bg.toFront();
+        this.table.toFront();
     }
     Image bg;
 
     public Menu(String name, Skin skin, Stage stage){
 
-        table = new Table(skin);
-        table.setBounds(stage.getWidth()/2-stage.getWidth()/3f,stage.getHeight()/2-stage.getHeight()/3f,stage.getWidth()/1.5f,stage.getHeight()/1.5f);
-        table.setVisible(true);
-        table.setDebug(true);
-        menuName = new Label(name,new Label.LabelStyle(generatefont(), Color.BLACK));
-        menuName.setAlignment(Align.center);
-        table.add(menuName)
+        this.table = new Table(skin);
+        this.table.setBounds(stage.getWidth()/2-stage.getWidth()/3f,stage.getHeight()/2-stage.getHeight()/3f,stage.getWidth()/1.5f,stage.getHeight()/1.5f);
+        this.table.setVisible(true);
+        this.table.setDebug(true);
+        this.menuName = new Label(name,new Label.LabelStyle(generatefont(), Color.BLACK));
+        this.menuName.setAlignment(Align.center);
+        this.table.add(this.menuName)
                 .expand()
                 .fill()
                 .colspan(2);
@@ -68,13 +68,13 @@ public class Menu {
         MakeMenu(PrepareActors(skin),stage);
 
 
-        bg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menubg2.png")))));
-        bg.setBounds(stage.getWidth()/2-stage.getWidth()/3f-20f,stage.getHeight()/2-stage.getHeight()/3f-25f,stage.getWidth()/1.5f+20f,stage.getHeight()/1.5f+20f);
-        bg.setTouchable(Touchable.disabled);
-        bg.setVisible(true);
+        this.bg = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("menubg2.png")))));
+        this.bg.setBounds(stage.getWidth()/2-stage.getWidth()/3f-20f,stage.getHeight()/2-stage.getHeight()/3f-25f,stage.getWidth()/1.5f+20f,stage.getHeight()/1.5f+20f);
+        this.bg.setTouchable(Touchable.disabled);
+        this.bg.setVisible(true);
 
-        stage.addActor(bg);
-        stage.addActor(table);
+        stage.addActor(this.bg);
+        stage.addActor(this.table);
     }
 
     boolean isToggled = true;
@@ -92,14 +92,14 @@ public class Menu {
                 Game.sd.VolumeMusic(msSlider.getValue());
             }
         });
-        sliderContainer = new Container<Slider>(msSlider);
-        sliderContainer.setTransform(true);
-        sliderContainer.setScale(5);
-        sliderContainer.setScaleX(((table.getWidth()-100)/2)/msSlider.getWidth());
-        Log.d("Slider","Width: "+((table.getWidth()-100)/2)+" SizeX: "+msSlider.getWidth()/2);
+        this.sliderContainer = new Container<Slider>(msSlider);
+        this.sliderContainer.setTransform(true);
+        this.sliderContainer.setScale(5);
+        this.sliderContainer.setScaleX(((this.table.getWidth()-100)/2)/msSlider.getWidth());
+        Log.d("Slider","Width: "+((this.table.getWidth()-100)/2)+" SizeX: "+msSlider.getWidth()/2);
 
-        sliderContainer.setOrigin(msSlider.getWidth()/2,msSlider.getHeight()/2);
-        sliderContainer.setSize(msSlider.getWidth()/(((table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
+        this.sliderContainer.setOrigin(msSlider.getWidth()/2,msSlider.getHeight()/2);
+        this.sliderContainer.setSize(msSlider.getWidth()/(((this.table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
 
         Label efVolume = new Label("Effects Volume",new Label.LabelStyle(generatefont(), Color.BLACK));
         Slider efSlider = new Slider(0,100,1,false,skin);
@@ -107,28 +107,28 @@ public class Menu {
         efSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               Game.sd.LowerSoundEffects(efSlider.getValue());
+                Game.sd.LowerSoundEffects(efSlider.getValue());
             }
         });
 
         Container<Slider> efContainer = new Container<Slider>(efSlider);
         efContainer.setTransform(true);
         efContainer.setScale(5);
-        efContainer.setScaleX(((table.getWidth()-100)/2)/msSlider.getWidth());
-        Log.d("Slider","Width: "+((table.getWidth()-100)/2)+" SizeX: "+msSlider.getWidth()/2);
+        efContainer.setScaleX(((this.table.getWidth()-100)/2)/msSlider.getWidth());
+        Log.d("Slider","Width: "+((this.table.getWidth()-100)/2)+" SizeX: "+msSlider.getWidth()/2);
 
         efContainer.setOrigin(msSlider.getWidth()/2,msSlider.getHeight()/2);
-        efContainer.setSize(msSlider.getWidth()/(((table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
+        efContainer.setSize(msSlider.getWidth()/(((this.table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
 
 
         Label notifyLb = new Label("Notifications",new Label.LabelStyle(generatefont(), Color.BLACK));
 
         TextButton notifyChecker = new TextButton(null,skin.get("toggle",TextButton.TextButtonStyle.class));
-        notifyChecker.setSize(msSlider.getWidth()/(((table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
+        notifyChecker.setSize(msSlider.getWidth()/(((this.table.getWidth()-100)/2)/msSlider.getWidth()),msSlider.getHeight());
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-           notifyLb.setVisible(false);
-           notifyChecker.setVisible(false);
+            notifyLb.setVisible(false);
+            notifyChecker.setVisible(false);
         }
         else{
             NotificationManager mNotificationManager = (NotificationManager) ((AndroidApplication) Gdx.app).getContext().getSystemService(((AndroidApplication) Gdx.app).getContext().NOTIFICATION_SERVICE);
@@ -173,12 +173,12 @@ public class Menu {
             };
         });
 
-        mainMenu.setSize(table.getWidth()/2,100);
+        mainMenu.setSize(this.table.getWidth()/2,100);
 
 
 
         actors.add(msVolume);
-        actors.add(sliderContainer);
+        actors.add(this.sliderContainer);
         actors.add(efVolume);
         actors.add(efContainer);
         actors.add(notifyLb);
@@ -192,18 +192,18 @@ public class Menu {
 
     public void MakeMenu(ArrayList<Actor> actors,Stage stage){
         for (int i=0;i<3;i++){
-            table.row().pad(0,50,0,50);
-            table.add(actors.get(i*2)).left().pad(0,50,0,0);
+            this.table.row().pad(0,50,0,50);
+            this.table.add(actors.get(i*2)).left().pad(0,50,0,0);
 
             if(i*2+1 == 5){
-                table.add(actors.get((i*2)+1)).fill().pad(0,0,0,50);
+                this.table.add(actors.get((i*2)+1)).fill().pad(0,0,0,50);
             }
             else{
-                table.add(actors.get((i*2)+1)).width(sliderContainer.getWidth()).pad(0,0,0,50);
+                this.table.add(actors.get((i*2)+1)).width(this.sliderContainer.getWidth()).pad(0,0,0,50);
             }
         }
-        table.row().pad(10,table.getWidth()/8,0,table.getWidth()/8);
-        table.add(actors.get(6)).expand().fill().colspan(2);
+        this.table.row().pad(10,this.table.getWidth()/8,0,this.table.getWidth()/8);
+        this.table.add(actors.get(6)).expand().fill().colspan(2);
     }
 
 

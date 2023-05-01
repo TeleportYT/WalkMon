@@ -1,12 +1,13 @@
 package Enemys;
 
-import static com.vik.test.Game.context;
 import static com.vik.test.Game.mapLevel;
 import static com.vik.test.Game.stats;
 
 import android.content.Intent;
 import android.util.Log;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.vik.test.Difficulty;
 import com.vik.test.FireballManager;
 import com.vik.test.Game;
@@ -29,9 +30,9 @@ public class EnemyManager {
     private int enemiesAmount;
 
     public EnemyManager(Difficulty difficulty){
-        enemyies = new ArrayList<Enemy>();
-        fbManager = new FireballManager();
-        Duplicators = new ArrayList<Duplicator>();
+        this.enemyies = new ArrayList<Enemy>();
+        this.fbManager = new FireballManager();
+        this.Duplicators = new ArrayList<Duplicator>();
         GenerateByDifficulty(difficulty );
     }
 
@@ -62,8 +63,8 @@ public class EnemyManager {
 
     public void GenerateEnemys(int warriors,int bobs,int duplicators){
         int maxEnemies = warriors+bobs+duplicators;
-        enemiesAmount = maxEnemies;
-        Log.d("AmountS","We have: "+enemiesAmount);
+        this.enemiesAmount = maxEnemies;
+        Log.d("AmountS","We have: "+this.enemiesAmount);
         Random rand = new Random();
 
         while(maxEnemies!=0){
@@ -97,7 +98,7 @@ public class EnemyManager {
                     z = (rand.nextInt(mapLevel.getSize()));
                 }
                 Duplicator dp = new Duplicator(x,z);
-                Duplicators.add(dp);
+                this.Duplicators.add(dp);
                 duplicators--;
                 maxEnemies--;
             }
@@ -109,21 +110,21 @@ public class EnemyManager {
 
     boolean isFinished = false;
     public void Update(){
-        fbManager.Update();
-            for (Enemy enemy : enemyies) {
-                enemy.Update();
-            }
-            for (Duplicator enemy : Duplicators){
-                enemy.Update();
-            }
-            Log.d("AmountD","Left: "+enemyies.size()+" "+Duplicators.size());
-            if (enemyies.isEmpty() && Duplicators.isEmpty() && !isFinished){
-                Log.d("Winned","All enemies cleared");
-                Intent nt = new Intent("Stage Cleared");
-                context.sendBroadcast(nt);
-                isFinished = true;
+        this.fbManager.Update();
+        for (Enemy enemy : this.enemyies) {
+            enemy.Update();
+        }
+        for (Duplicator enemy : this.Duplicators){
+            enemy.Update();
+        }
+        Log.d("AmountD","Left: "+enemyies.size()+" "+this.Duplicators.size());
+        if (this.enemyies.isEmpty() && this.Duplicators.isEmpty() && !this.isFinished){
+            Log.d("Winned","All enemies cleared");
+            Intent nt = new Intent("Stage Cleared");
+            ((AndroidApplication) Gdx.app).getContext().sendBroadcast(nt);
+            this.isFinished = true;
 
-            }
+        }
 
     }
 

@@ -10,19 +10,19 @@ public class FireballManager {
     private Iterator<FireBall> checker;
 
     public FireballManager(){
-        fireballs = new ArrayList<FireBall>();
+        this.fireballs = new ArrayList<FireBall>();
     }
 
     public void AddFireBall(FireBall fireball){
-        fireballs.add(fireball);
+        this.fireballs.add(fireball);
     }
 
     public void Update(){
-        checker = fireballs.iterator();
-        while(checker.hasNext()){
-            FireBall fb = checker.next();
+        this.checker = this.fireballs.iterator();
+        while(this.checker.hasNext()){
+            FireBall fb = this.checker.next();
             fb.Update();
-            if(!fireballs.contains(fb)){
+            if(!this.fireballs.contains(fb)){
                 break;
             }
         }

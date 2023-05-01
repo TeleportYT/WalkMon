@@ -1,5 +1,7 @@
 package Enemys;
 
+import static com.vik.test.Game.mg;
+
 import com.vik.test.Game;
 
 public class Minion extends Warrior{
@@ -15,7 +17,7 @@ public class Minion extends Warrior{
 
     @Override
     public void Die(){
-        father.getMinions().remove(this);
-        Game.instances.remove(this.modelInstance);
+        this.father.getMinions().remove(this);
+        mg.getSceneManager().removeScene(this.enemyModel);
     }
 }

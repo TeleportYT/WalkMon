@@ -23,17 +23,17 @@ public class FireBall extends Projectiles{
 
     @Override
     public void Update() {
-        if(PlayerController.position.dst2(position) < (0.5) * (0.5)){
+        if(PlayerController.position.dst2(this.position) < (0.5) * (0.5)){
             Collision();
         }
         super.Update();
     }
 
     public void Collision(){
-            Gdx.app.setLogLevel(Application.LOG_DEBUG);
-            Gdx.app.debug("Enemy","i see you");
-            Game.pc.Damage(this.damage, EnemyType.bob);
-            Game.instances.remove(this.model);
-            FireballManager.fireballs.remove(this);
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Gdx.app.debug("Enemy","i see you");
+        Game.pc.Damage(this.damage, EnemyType.bob);
+        Game.instances.remove(this.model);
+        FireballManager.fireballs.remove(this);
     }
 }

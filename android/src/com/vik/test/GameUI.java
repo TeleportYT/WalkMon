@@ -47,19 +47,19 @@ public class GameUI {
         intentFilter.addAction("Player Healed");
         ((AndroidApplication) Gdx.app).getContext().registerReceiver(receiver,intentFilter);
 
-       this.st = new Stage(new ScreenViewport());
-       this.skin = Game.manager.get("uiskin.json",Skin.class);
-       Skin mySkin = Game.manager.get("fire_button.json",Skin.class);
+        this.st = new Stage(new ScreenViewport());
+        this.skin = Game.manager.get("uiskin.json",Skin.class);
+        Skin mySkin = Game.manager.get("fire_button.json",Skin.class);
 
-       this.th = new Touchpad(0f,skin.get(Touchpad.TouchpadStyle.class));
-       th.setSize(st.getHeight()/2.5f,st.getHeight()/2.5f);
-       th.setBounds(10,10,st.getHeight()/2.5f,st.getHeight()/2.5f);
+        this.th = new Touchpad(0f,this.skin.get(Touchpad.TouchpadStyle.class));
+        this.th.setSize(this.st.getHeight()/2.5f,this.st.getHeight()/2.5f);
+        this.th.setBounds(10,10,this.st.getHeight()/2.5f,this.st.getHeight()/2.5f);
 
 
         this.shotBt = new Button(mySkin.get(Button.ButtonStyle.class));
-        shotBt.setSize(st.getHeight()/4,st.getHeight()/4);
-        shotBt.setPosition(st.getWidth()-st.getHeight()/3 ,st.getHeight()/8);
-        shotBt.addListener(new EventListener() {
+        this.shotBt.setSize(this.st.getHeight()/4,this.st.getHeight()/4);
+        this.shotBt.setPosition(this.st.getWidth()-this.st.getHeight()/3 ,this.st.getHeight()/8);
+        this.shotBt.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 Game.pc.Fire();
@@ -70,23 +70,23 @@ public class GameUI {
 
 
 
-       crossair = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("crossair.png")))));
-       crossair.setSize(st.getHeight()/4,st.getHeight()/4);
-       crossair.setPosition(st.getWidth()/2-st.getHeight()/8,st.getHeight()/2-st.getHeight()/8);
-       crossair.setTouchable(Touchable.disabled);
+        this.crossair = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("crossair.png")))));
+        this.crossair.setSize(this.st.getHeight()/4,st.getHeight()/4);
+        this.crossair.setPosition(this.st.getWidth()/2-st.getHeight()/8,this.st.getHeight()/2-this.st.getHeight()/8);
+        this.crossair.setTouchable(Touchable.disabled);
 
-       BloodEffect = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("bloodEffect.png")))));
-       BloodEffect.setColor(255,255,255,0);
-       BloodEffect.setSize(st.getWidth(),st.getHeight());
-       BloodEffect.setTouchable(Touchable.disabled);
+        BloodEffect = new Image(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("bloodEffect.png")))));
+        BloodEffect.setColor(255,255,255,0);
+        BloodEffect.setSize(this.st.getWidth(),this.st.getHeight());
+        BloodEffect.setTouchable(Touchable.disabled);
         Texture  myTexture = new Texture(Gdx.files.internal("buttonSet.png"));
         TextureRegion myTextureRegion = new TextureRegion(myTexture);
         TextureRegionDrawable myTexRegionDrawable = new TextureRegionDrawable(myTextureRegion);
 
 
         ImageButton button = new ImageButton(myTexRegionDrawable); //Set the button up
-        button.setSize(st.getHeight()/6,st.getHeight()/6);
-        button.setPosition(st.getWidth()-button.getWidth(),st.getHeight()-button.getHeight());
+        button.setSize(this.st.getHeight()/6,this.st.getHeight()/6);
+        button.setPosition(this.st.getWidth()-button.getWidth(),this.st.getHeight()-button.getHeight());
         button.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -103,38 +103,35 @@ public class GameUI {
                 isMenu = !isMenu;
                 Intent intent=new Intent("Pause Game");
                 intent.putExtra("isPaused", isMenu);
-                Game.context.sendBroadcast(intent);
+                ((AndroidApplication) Gdx.app).getContext().sendBroadcast(intent);
             };
         });
 
-       // MakeDialog();
+        // MakeDialog();
 
-         menu = new Menu("Settings",skin,st);
-         menu.setVisible(false);
-        st.addActor(menu.getTable());
-        st.addActor(BloodEffect);
-        st.addActor(crossair);
-        st.addActor(th);
-        st.addActor(shotBt);
-        st.addActor(button);
+        this.menu = new Menu("Settings",this.skin,this.st);
+        this.menu.setVisible(false);
+        this.st.addActor(menu.getTable());
+        this.st.addActor(BloodEffect);
+        this.st.addActor(crossair);
+        this.st.addActor(th);
+        this.st.addActor(shotBt);
+        this.st.addActor(button);
 
 
-        st.draw();
+        this.st.draw();
     }
 
 
 
 
     public void Update(){
-        BloodEffect.setColor(255,255,255,1-(Game.pc.hp/100));
-        st.act(Gdx.graphics.getDeltaTime());
-        st.draw();
+        this.BloodEffect.setColor(255,255,255,1-(Game.pc.hp/100));
+        this.st.act(Gdx.graphics.getDeltaTime());
+        this.st.draw();
     }
 
 
-    public Stage GetStage(){
-        return this.st;
-    }
 
 
     //region Broadcast Receiver

@@ -18,37 +18,33 @@ public class Floor {
 
     private Model md;
     private ModelInstance mi;
-    private float x,z,y,degrees;
 
 
-   public Floor(float x,float y,float z,float degrees){
-       this.md = BuildFloor();
-       this.mi = new ModelInstance(this.md);
-       this.x = x;
-       this.z = z;
-       this.degrees = degrees;
-       this.mi.transform.setToTranslation(x,y,z);
-       this.mi.transform.rotate(1,0,1,degrees);
-       Game.instances.add(mi);
+    public Floor(float x,float y,float z,float degrees){
+        this.md = BuildFloor();
+        this.mi = new ModelInstance(this.md);
+        this.mi.transform.setToTranslation(x,y,z);
+        this.mi.transform.rotate(1,0,1,degrees);
+        Game.instances.add(mi);
 
 
 
-   }
+    }
 
-   public Model BuildFloor(){
-       ModelBuilder modelBuilder = new ModelBuilder();
-       modelBuilder.begin();
-       Texture brickTexture = Game.manager.get("floor.png",Texture.class);
-       Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));
-       MeshPartBuilder builder = modelBuilder.part("floor", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, brickMaterial);
-       builder.rect(0, 0, 1,
-               1, 0, 1,
-               1, 0, 0,
-               0, 0, 0,
-               0, 2, 0);
-       builder.setVertexTransform(new Matrix4().rotate(new Vector3(1,0,1),90));
-       Model model = modelBuilder.end();
-       return  model;
-   }
+    public Model BuildFloor(){
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.begin();
+        Texture brickTexture = Game.manager.get("floor.png",Texture.class);
+        Material brickMaterial = new Material(TextureAttribute.createDiffuse(brickTexture), ColorAttribute.createSpecular(1, 1, 1, 1), FloatAttribute.createShininess(8f));
+        MeshPartBuilder builder = modelBuilder.part("floor", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, brickMaterial);
+        builder.rect(0, 0, 1,
+                1, 0, 1,
+                1, 0, 0,
+                0, 0, 0,
+                0, 2, 0);
+        builder.setVertexTransform(new Matrix4().rotate(new Vector3(1,0,1),90));
+        Model model = modelBuilder.end();
+        return  model;
+    }
 
 }

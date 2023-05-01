@@ -14,8 +14,8 @@ public class Bob extends Enemy{
 
     public Bob(float x, float z) {
         super(x, z, EnemyType.bob);
-        position = new Vector3(x+0.5f,0.5f,z+0.5f);
-        modelInstance.transform.setTranslation(x+0.5f,0.5f,z+0.5f);
+        this.position = new Vector3(x+0.5f,0.5f,z+0.5f);
+        this.modelInstance.transform.setTranslation(x+0.5f,0.5f,z+0.5f);
     }
 
     public void Update(){
@@ -24,18 +24,18 @@ public class Bob extends Enemy{
 
 
         float dt = Gdx.graphics.getDeltaTime();
-        position = new Vector3();
-        this.modelInstance.transform.getTranslation(position);
-        position.mulAdd(direction, -Gdx.graphics.getDeltaTime());
-        position.y = 0.5f;
-        if(ifSeePlayer(direction) && position.dst2(PlayerController.position)>2f * 1f) {
-            modelInstance.transform.set(position,quaternion);
+        this.position = new Vector3();
+        this.modelInstance.transform.getTranslation(this.position);
+        this.position.mulAdd(this.direction, -Gdx.graphics.getDeltaTime());
+        this.position.y = 0.5f;
+        if(ifSeePlayer(this.direction) && this.position.dst2(PlayerController.position)>2f * 1f) {
+            this.modelInstance.transform.set(this.position,this.quaternion);
         }
 
-        if(shootTimer <= 0){
-            if(ifSeePlayer(direction)){
-                if(Game.mapLevel.lineOfSightCheap(position, PlayerController.position)){
-                    Attack(direction);
+        if(this.shootTimer <= 0){
+            if(ifSeePlayer(this.direction)){
+                if(Game.mapLevel.lineOfSightCheap(this.position, PlayerController.position)){
+                    Attack(this.direction);
                 }
             }
             shootTimer = 2.5f;
@@ -45,12 +45,12 @@ public class Bob extends Enemy{
         }
 
 
-        modelInstance.transform.scale(0.2f,0.2f,0.2f);
+        this.modelInstance.transform.scale(0.2f,0.2f,0.2f);
     }
 
 
     public void Attack(Vector3 direction){
-        EnemyManager.fbManager.AddFireBall(new FireBall(10,2,position,direction, Game.mapLevel));
+        EnemyManager.fbManager.AddFireBall(new FireBall(10,2,this.position,direction, Game.mapLevel));
     }
 
     @NonNull

@@ -27,7 +27,7 @@ public class Level {
     private List<Floor> floorsList;
 
     public int getSize() {
-        return Size;
+        return this.Size;
     }
 
     private int Size;
@@ -39,7 +39,7 @@ public class Level {
         this.Size = Size;
         this.maxLength = maxLength;
         this.maxTunnels = maxTunnels;
-        mapArr = new int[this.Size][this.Size];
+        this.mapArr = new int[this.Size][this.Size];
         this.wallsList = new ArrayList<>();
         this.floorsList = new ArrayList<>();
         int currentRow = (int)Math.floor(Math.random()*this.Size);
@@ -64,7 +64,7 @@ public class Level {
                         ((currentColumn == this.Size - 1) && (nextDirection[1] == 1))) {
                     break;
                 } else {
-                    mapArr[currentRow][currentColumn] = 1; //set the value of the index in map to 0 (a tunnel, making it one longer)
+                    this.mapArr[currentRow][currentColumn] = 1; //set the value of the index in map to 0 (a tunnel, making it one longer)
                     currentRow += nextDirection[0]; //add the value from randomDirection to row and col (-1, 0, or 1) to update our location
                     currentColumn += nextDirection[1];
                     tunnelLength++; //the tunnel is now one longer, so lets increment that variable
@@ -80,17 +80,17 @@ public class Level {
 
 
         for(int i = 0; i<this.Size;i++){
-            wallsList.add(new Wall(-1,i,0.5f));
-           wallsList.add(new Wall(Size,i,0.5f));
-            wallsList.add(new Wall(i,-1,0.5f));
-            wallsList.add(new Wall(i,Size,0.5f));
+            this.wallsList.add(new Wall(-1,i,0.5f));
+            this.wallsList.add(new Wall(Size,i,0.5f));
+            this.wallsList.add(new Wall(i,-1,0.5f));
+            this.wallsList.add(new Wall(i,Size,0.5f));
             for(int j = 0; j<this.Size;j++){
-                if(mapArr[i][j] == 0){
-                    wallsList.add(new Wall(i,j,0.5f));
+                if(this.mapArr[i][j] == 0){
+                    this.wallsList.add(new Wall(i,j,0.5f));
                 }
                 else{
-                    floorsList.add(new Floor(i,0,j,0));
-                    floorsList.add(new Floor(i,1,j,180));
+                    this.floorsList.add(new Floor(i,0,j,0));
+                    this.floorsList.add(new Floor(i,1,j,180));
                 }
             }
         }

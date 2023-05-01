@@ -13,8 +13,8 @@ public class Warrior extends Enemy{
     private float attackTimer = 1f;
     public Warrior(float x, float z) {
         super(x, z,EnemyType.warrior);
-        position = new Vector3(x+0.5f,0.25f,z+0.5f);
-        modelInstance.transform.setTranslation(x+0.5f,.25f,z+0.5f);
+        this.position = new Vector3(x+0.5f,0.25f,z+0.5f);
+        this.modelInstance.transform.setTranslation(x+0.5f,.25f,z+0.5f);
     }
 
 
@@ -22,28 +22,28 @@ public class Warrior extends Enemy{
         super.Update();
 
         float dt = Gdx.graphics.getDeltaTime();
-        position = new Vector3();
-        this.modelInstance.transform.getTranslation(position);
-        position.mulAdd(direction, -Gdx.graphics.getDeltaTime());
-        position.y = 0.25f;
-        if(ifSeePlayer(direction) && position.dst2(PlayerController.position)>0.5f * 0.5f) {
-            modelInstance.transform.set(position,quaternion);
+        this.position = new Vector3();
+        this.modelInstance.transform.getTranslation(this.position);
+        this.position.mulAdd(this.direction, -Gdx.graphics.getDeltaTime());
+        this.position.y = 0.25f;
+        if(ifSeePlayer(this.direction) && this.position.dst2(PlayerController.position)>0.5f * 0.5f) {
+            this.modelInstance.transform.set(this.position,this.quaternion);
         }
-        else if(position.dst2(PlayerController.position)<0.5f * 0.5f){
-            if(attackTimer <= 0){
-                if(ifSeePlayer(direction)){
-                    if(Game.mapLevel.lineOfSightCheap(position, PlayerController.position)){
-                        Attack(direction);
+        else if(this.position.dst2(PlayerController.position)<0.5f * 0.5f){
+            if(this.attackTimer <= 0){
+                if(ifSeePlayer(this.direction)){
+                    if(Game.mapLevel.lineOfSightCheap(this.position, PlayerController.position)){
+                        Attack(this.direction);
                     }
                 }
-                attackTimer = 1;
+                this.attackTimer = 1;
             }
             else{
-                attackTimer-= dt;
+                this.attackTimer-= dt;
             }
         }
 
-        modelInstance.transform.scale(0.2f,0.2f,0.2f);
+        this.modelInstance.transform.scale(0.2f,0.2f,0.2f);
     }
 
     @Override

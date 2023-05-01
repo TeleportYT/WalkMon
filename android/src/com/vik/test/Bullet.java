@@ -27,14 +27,14 @@ public class Bullet extends Projectiles {
     public void Update() {
 
         for (Enemy enemy: EnemyManager.enemyies) {
-            if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+            if(enemy.getPosition().dst2(this.position)<=(0.5*0.5)){
                 Collision(enemy);
                 break;
             }
         }
 
         for(Enemy enemy : EnemyManager.Duplicators){
-            if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+            if(enemy.getPosition().dst2(this.position)<=(0.5*0.5)){
                 Collision(enemy);
                 break;
             }
@@ -45,7 +45,7 @@ public class Bullet extends Projectiles {
             for (Duplicator duplicator : EnemyManager.Duplicators){
                 if(!duplicator.getMinions().isEmpty()){
                     for (Warrior enemy: duplicator.getMinions()){
-                        if(enemy.getPosition().dst2(position)<=(0.5*0.5)){
+                        if(enemy.getPosition().dst2(this.position)<=(0.5*0.5)){
                             Collision(enemy);
                             break;
                         }
@@ -58,10 +58,10 @@ public class Bullet extends Projectiles {
     }
 
     public void Collision(Enemy enemy){
-            enemy.GetDamage(10f);
-            Gdx.app.setLogLevel(Application.LOG_DEBUG);
-            Gdx.app.debug("shoot","hitted");
-            Game.instances.remove(this.model);
-            BulletManager.bullets.remove(this);
+        enemy.GetDamage(10f);
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Gdx.app.debug("shoot","hitted");
+        Game.instances.remove(this.model);
+        BulletManager.bullets.remove(this);
     }
 }

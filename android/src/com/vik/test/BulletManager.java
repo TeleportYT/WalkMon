@@ -9,19 +9,19 @@ public class BulletManager {
     private Iterator<Bullet> checker;
 
     public BulletManager(){
-        bullets = new ArrayList<Bullet>();
+        this.bullets = new ArrayList<Bullet>();
     }
 
     public void AddBullet(Bullet bullet){
-        bullets.add(bullet);
+        this.bullets.add(bullet);
     }
 
     public void Update(){
-        checker = bullets.iterator();
-        while(checker.hasNext()){
-            Bullet bt = checker.next();
+        this.checker = this.bullets.iterator();
+        while(this.checker.hasNext()){
+            Bullet bt = this.checker.next();
             bt.Update();
-            if(!bullets.contains(bt)){
+            if(!this.bullets.contains(bt)){
                 break;
             }
         }
