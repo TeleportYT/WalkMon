@@ -224,7 +224,7 @@ public class AndroidLauncher extends Activity {
 
 		SeekBar effects = settingsMenu.findViewById(R.id.effectsBar);
 
-		effects.setProgress((int)prefs.getFloat("Music",100));
+		effects.setProgress((int)prefs.getFloat("SoundEffect",100));
 
 		effects.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 			@Override
